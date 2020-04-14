@@ -1,7 +1,7 @@
 import Colors from './Colors';
 
 export default {
-  boxLayout:{
+  boxLayout: {
     borderRadius: 10,
     padding: 12
   },
@@ -29,13 +29,13 @@ export default {
     shadowOffset: { width: 6, height: 6 },
     borderColor: Colors.defaultBackground //'#fff'
   },
-  defaultRadius:{
+  defaultRadius: {
     borderRadius: 10,
   },
-  defaultColor:{
+  defaultColor: {
     color: Colors.themeColorPrimary
   },
-  defaultBg:{
+  defaultBg: {
     backgroundColor: Colors.themeColorPrimary
   },
   heading: {
@@ -46,54 +46,91 @@ export default {
   fontSizeNormal: {
     fontSize: 18,
   },
-  m1:{
+  m1: {
     margin: 5
   },
-  m2:{
+  m2: {
     margin: 10
   },
-  m3:{
+  m3: {
     margin: 15
   },
-  m4:{
+  m4: {
     margin: 20
   },
-  m5:{
+  m5: {
     margin: 25
   },
-  mr1:{
+  mr1: {
     marginRight: 5
   },
-  mr2:{
+  mr2: {
     marginRight: 10
   },
-  mv1:{
+  mv1: {
     marginVertical: 5
   },
-  mv2:{
+  mv2: {
     marginVertical: 10
   },
-  mv3:{
+  mv3: {
     marginVertical: 15
   },
-  mv4:{
+  mv4: {
     marginVertical: 20
   },
-  mv5:{
+  mv5: {
     marginVertical: 25
   },
-  p1:{
+  mb1: {
+    marginBottom: 5
+  },
+  mb2: {
+    marginBottom: 10
+  },
+  mb3: {
+    marginBottom: 15
+  },
+  ml1: {
+    marginLeft: 5
+  },
+  ml2: {
+    marginLeft: 10
+  },
+  p1: {
     padding: 5
   },
-  p2:{
+  p2: {
     padding: 10
   },
-  p3:{
+  p3: {
     padding: 15
+  },
+  ph1:{
+    paddingHorizontal: 5
+  },
+  ph2:{
+    paddingHorizontal: 10
   },
   pageContainer: {
     paddingHorizontal: 15,
     paddingVertical: 15,
     backgroundColor: Colors.defaultBackground,
-  }
+  },
+  alignCenter: {
+    textAlign: 'center'
+  },
+  bold: {
+    fontWeight: 'bold'
+  },
+  textWhite:{
+    color: '#fff'
+  },
+  colorGray:{
+    color: '#666'
+  },
+  justifyContent: {
+    justifyContent: 'center'
+  },
+  rightCenter: { justifyContent: 'center', alignItems: 'flex-end' }
 };

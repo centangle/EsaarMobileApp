@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View, Button } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,7 +12,9 @@ import useLinking from './navigation/useLinking';
 import RequestListScreen from './screens/RequestListScreen';
 import DonateListScreen from './screens/DonateListScreen';
 import DonateScreen from './screens/DonateScreen';
-
+import TaskScreen from './screens/TaskScreen';
+import VolunteerListScreen from './screens/VolunteerListScreen';
+import SplashScreenView from './components/SplashScreenView';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -49,17 +51,19 @@ export default function App(props) {
   }, []);
 
   if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
+    return <SplashScreenView />;
   } else {
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator}/>
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="DonateList" component={DonateListScreen} />
             <Stack.Screen name="Donate" component={DonateScreen} />
             <Stack.Screen name="RequestList" component={RequestListScreen} />
+            <Stack.Screen name="VolunteerList" component={VolunteerListScreen} />
+            <Stack.Screen name="Task" component={TaskScreen} />
           </Stack.Navigator>
           {/* <Drawer.Navigator initialRouteName="Home">
             <Drawer.Screen name="Root" component={BottomTabNavigator} />

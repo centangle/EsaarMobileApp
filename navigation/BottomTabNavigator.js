@@ -33,7 +33,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     {
       name: 'Profile',
       title: 'Profile',
-      component: TasksScreen,
+      component: ProfileScreen,
       iconName: '-person'
     },
     {

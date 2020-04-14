@@ -11,11 +11,13 @@ import QuantityField from '../components/QuantityField';
 import DateTimeOption from './../components/DateTimeOption';
 import ImagePickerOption from '../components/ImagePickerOption';
 import StyleButton from '../components/StyleButton';
+import DonateConfirmation from './DonateConfirmation';
 
 export default class DonateScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      donateConfirm: false,
       catgeories: [
         {
           name: 'All',
@@ -61,13 +63,23 @@ export default class DonateScreen extends React.Component {
   }
 
   donate(){
-    console.log(this.props.navigation)
+    //console.log(this.props.navigation)
+    this.setState({
+      donateConfirm: true
+    })
+  }
+
+  onchangeModalStatus(){
+    this.setState({
+      donateConfirm: false
+    })
     this.props.navigation.popToTop();
   }
 
   render() {
     return (
       <ScrollView>
+        <DonateConfirmation isVisible={this.state.donateConfirm} changeModalStatus={()=>this.onchangeModalStatus()}/>
         <View style={styles.container}>
           <Text style={styles.heading}>Organization</Text>
           <View style={styles.selectedOrg}>
@@ -90,7 +102,7 @@ export default class DonateScreen extends React.Component {
             <Text style={styles.selectedCategories}>Selected Category: Food, Shelter</Text>
           </View>
 
-          <ScrollView style={styles.categoriesContainer} horizontal={true}>
+          <ScrollView style={styles.categoriesContainer} horizontal={true} nestedScrollEnabled={true}>
             {
               this.state.catgeories.map((category, i) => {
                 const { name, icon, selected } = category;
