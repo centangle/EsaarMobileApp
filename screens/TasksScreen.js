@@ -25,9 +25,9 @@ export default function TasksScreen(props) {
         </Text>
         <View style={styles.grid}>
           {
-            organizations.map(org => {
+            organizations.map((org, i) => {
               return (
-                <Button style={[Style.outerShadow, Style.boxLayout, styles.btnWrapper]}>
+                <Button style={[Style.outerShadow, Style.boxLayout, styles.btnWrapper]} key={i}>
                   <Image style={styles.image} source={require('./../assets/images/saylani.png')} />
                   <Text style={[Style.alignCenter, Style.bold, Style.mb1]}>Saylani Razakar Foundation</Text>
                   <Text style={[Style.alignCenter]}>Open Task 2</Text>
