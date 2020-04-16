@@ -47,11 +47,11 @@ export const connectionOptions = {
   "path": '/beats'
 }
 
-const click = new Audio('sounds/click.mp3')
-click.volume = 0.25
+// const click = new Audio('sounds/click.mp3')
+// click.volume = 0.25
 
-const alarm = new Audio('sounds/alarm.mp3')
-alarm.volume = 0.5
+// const alarm = new Audio('sounds/alarm.mp3')
+// alarm.volume = 0.5
 
 /**
  * Update namespaces from the server.

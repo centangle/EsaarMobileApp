@@ -10,6 +10,7 @@ import NotificationsScreen from '../screens/NotificationsScreen';
 import { Platform } from 'react-native';
 import Colors from '../constants/Colors';
 import LogoTitle from '../components/LogoTitle';
+import TabHeader from '../components/TabHeader';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -85,7 +86,7 @@ function getHeaderTitle(route) {
     case 'Home':
       return <LogoTitle />;
     case 'Tasks':
-      return 'Tasks';
+      return <TabHeader title={routeName}/>;
     case 'Profile':
       return 'Profile';
     case 'Search':

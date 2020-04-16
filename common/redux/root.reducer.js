@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+//import storage from 'redux-persist/lib/storage';
 
 import setting from './setting/setting.reducers';
 import user from './user/user.reducers';
@@ -10,9 +10,10 @@ import organization from './organization/organization.reducers';
 import request from './request/request.reducers';
 import upload from './upload/upload.reducer';
 import donation from './donation/donation.reducers';
+import { AsyncStorage } from "react-native";
 const persistConfig = {
   key: 'root',
-  storage,
+  storage: AsyncStorage,
   whitelist: [user]//['cardsById','listsById','boardsById','currentUser','isGuest','currentBoardId','customersById']
 };
 
