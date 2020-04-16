@@ -23,7 +23,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.cent.esaar",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.cent.esaar",
+      "versionCode": 1
     }
   }
 }
