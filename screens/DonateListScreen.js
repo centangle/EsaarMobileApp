@@ -140,6 +140,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1,
   },
   catContainer: {
-    marginRight: 15,
+    marginRight: 10,
   }
 });

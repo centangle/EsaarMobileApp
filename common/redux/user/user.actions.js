@@ -24,7 +24,7 @@ export const checkUserSession = () => ({
 });
 
 export const signOutStart = () => ({
-  type: userTypes.SIGN_OUT_START
+  type: userTypes.SIGN_OUT
 });
 
 export const signOutSuccess = () => ({

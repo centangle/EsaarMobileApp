@@ -1,40 +1,17 @@
 import * as React from 'react';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ListItem } from 'react-native-elements';
-// import { ScrollView } from 'react-native-gesture-handler';
-import StyleCategoryButton from './../components/StyleCategoryButton';
 import Style from '../constants/Style';
 import Colors from './../constants/Colors';
-import ArrowRight from './../components/ArrowRight';
 import { Ionicons } from '@expo/vector-icons';
+import { TextInput } from 'react-native';
 
 export default class VolunteerListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      catgeories: [
-        {
-          name: 'All',
-          icon: require('./../assets/icons/all.png')
-        },
-        {
-          name: 'Food',
-          icon: require('./../assets/icons/food.png')
-        },
-        {
-          name: 'Health',
-          icon: require('./../assets/icons/food.png'),
-        },
-        {
-          name: 'Education',
-          icon: require('./../assets/icons/food.png')
-        },
-        {
-          name: 'Grocery',
-          icon: require('./../assets/icons/food.png')
-        }
-      ],
+      showSearch: false,
+      searchText: null,
       list: [
         {
           name: 'Amy Farha',
@@ -50,56 +27,34 @@ export default class VolunteerListScreen extends React.Component {
     }
   }
 
-  selectCategory(cat){
-    cat.selected = cat.selected ? false : true;
-    this.setState({
-      catgeories: [...this.state.catgeories, cat]
-    })
-  }
-
-  selectOrganization(org){
+  selectOrganization(org) {
     this.props.navigation.push('Donate');
   }
 
   render() {
+    const { showSearch } = this.state;
     return (
-      <View style={styles.container}>
-        <Text style={styles.heading}>Filter by Categories</Text>
-        <ScrollView style={styles.categoriesContainer} horizontal={true}>
-          {
-            this.state.catgeories.map((category, i) => {
-              const { name, icon, selected } = category;
-              return (
-                <TouchableOpacity key={i} onPress={()=>this.selectCategory(category)} style={{paddingVertical:10}}>
-                  <StyleCategoryButton
-                    selected={selected}
-                    btnStyle={styles.catContainer}
-                    title={name}
-                    icon={icon}
-                  />
-                </TouchableOpacity>
-              )
-            })
-          }
-        </ScrollView>
-        <View style={[Style.outerShadow, Style.defaultRadius, Style.mv2]}>
-          <TouchableOpacity style={Style.boxLayout}>
-            <Text style={[Colors.themeColorPrimary, styles.heading, styles.sendToAllBtn]}>Send to all organisations</Text>
-            <ArrowRight blue={true} />
-          </TouchableOpacity>
-        </View>
-        <Text style={[Style.fontSizeNormal, Style.defaultColor, Style.mv1]}>OR</Text>
+      <ScrollView style={[Style.pageContainer]}>
         <View>
-        <Text style={[styles.heading, Style.mv3]}>
-          Select Organization
+          <Text style={[styles.heading, Style.mv3]}>
+            Select Organization
           </Text>
           <Ionicons
-            onPress={()=>{console.log('search')}}
+            onPress={() => { this.setState({ showSearch: !this.state.showSearch }) }}
             name={'ios-search'}
             size={28}
-            style={{position: 'absolute', right: 0, top: 12}}
+            style={{ position: 'absolute', right: 0, top: 12 }}
           />
         </View>
+        {
+          showSearch ?
+            <TextInput
+              style={[Style.outerShadow, Style.boxLayout, styles.quantityInput, Style.mb2]}
+              placeholder="Search"
+              onChangeText={text => setText(text)}
+              defaultValue={this.state.searchText}
+            /> : null
+        }
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
           {
             this.state.list.map((l, i) => (
@@ -115,18 +70,13 @@ export default class VolunteerListScreen extends React.Component {
             ))
           }
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: Colors.defaultBackground,
-  },
   heading: {
     color: Colors.headingColor,
     fontSize: 20,

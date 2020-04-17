@@ -6,9 +6,10 @@ import { Button, Icon, Text } from 'native-base';
 import { signOutStart } from '../common/redux/user/user.actions';
 import { connect } from 'react-redux';
 
-function SettingsScreen({signOutStart}) {
+function SettingsScreen({navigation, signOutStart}) {
   const signout = () =>{
     signOutStart();
+    navigation.pop();
   }
 
   return (

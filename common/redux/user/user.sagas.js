@@ -29,6 +29,7 @@ export function* signInAsync(action) {
   }
 }
 export function* enterWithEmailStart() {
+  console.log('trying login: 2');
   yield takeEvery(
     userTypes.EMAIL_SIGN_IN_START,
     signInAsync
@@ -115,7 +116,7 @@ export function* onSearchGlobal() {
 }
 export function* signOutAsync() {
   const socket = yield select(selectSocket);
-  socket.disconnect();
+  //socket.disconnect();
 }
 export function* onSignOut() {
   yield takeLatest(userTypes.SIGN_OUT, signOutAsync);

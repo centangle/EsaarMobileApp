@@ -11,6 +11,15 @@ export const fetchOrganizationSuccess = collections =>({
   type:organizationTypes.FETCH_ORGANIZATION_SUCCESS,
   payload:collections
 });
+export const fetchOrgRequestsStart = (type,id,userType) =>({
+  type,
+  payload:id,
+  userType
+});
+export const fetchOrgCampaignsStart = (id)=>({
+  type:organizationTypes.FETCH_ORG_CAMPAIGN_START,
+  payload:id
+})
 export const fetchOrgRequestsSuccess = collections =>({
   type:organizationTypes.FETCH_ORG_REQUESTS_SUCCESS,
   payload:collections

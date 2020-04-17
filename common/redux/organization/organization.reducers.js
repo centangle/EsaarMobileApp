@@ -1,11 +1,14 @@
 import { organizationTypes } from './organization.types';
+import { Toast } from 'native-base';
 
 const INITIAL_STATE = {
   sider: false,
   organizations: [],
   requests: [],
+  campaigns:[],
   items: [],
   current: {},
+  campaignsLoading:false,
   itemsLoading: false,
   requestsLoading: false,
   membersLoading:false,
@@ -16,6 +19,17 @@ const INITIAL_STATE = {
 
 const organization = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'FETCH_ORG_CAMPAIGN_START':
+      return{
+        ...state,
+        campaignsLoading:true
+      }
+    case 'FETCH_ORG_CAMPAIGN_SUCCESS':
+      return{
+        ...state,
+        campaigns:action.payload,
+        campaignsLoading:false
+      }
     case 'REQUEST_START':
       return{
         ...state,
@@ -26,7 +40,11 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'REQUEST_SUCCESS':
     case 'REQUEST_FAILURE':
       if(action.payload.result && action.payload.result.ExceptionMessage)
-      alert(action.payload.result.ExceptionMessage);
+      Toast.show({
+        text: action.payload.result.ExceptionMessage,
+        duration: 4000
+      });
+      //alert(action.payload.result.ExceptionMessage);
       return{
         ...state,
         volunteerJoining:false,

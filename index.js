@@ -15,6 +15,8 @@ import VolunteerListScreen from './screens/VolunteerListScreen';
 import SplashScreenView from './components/SplashScreenView';
 import LoginScreen from './screens/LoginScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import OrganisationsListScreen from './screens/organisation/OrganisationsListScreen';
+import OrganisationProfileScreen from './screens/organisation/OrganisationProfileScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -36,19 +38,17 @@ function MainApp(props) {
         setLoadingComplete(true);
       }
     }
-
+    
     loadResourcesAndDataAsync();
   }, []);
 
-  const { user } = props;
-  const isLoggedin = user ? true: false;
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
         <Stack.Navigator>
           {
-            !isLoggedin ?
+            props.user===null ?
               <Stack.Screen name="Root" component={LoginScreen} /> :
               <Stack.Screen name="Root" component={BottomTabNavigator} />
           }
@@ -58,6 +58,8 @@ function MainApp(props) {
           <Stack.Screen name="VolunteerList" component={VolunteerListScreen} />
           <Stack.Screen name="Task" component={TaskScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Organizations" component={OrganisationsListScreen} />
+          <Stack.Screen name="OrganizationProfile" component={OrganisationProfileScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
   <Drawer.Screen name="Root" component={BottomTabNavigator} />
