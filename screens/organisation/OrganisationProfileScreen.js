@@ -6,48 +6,62 @@ import { Button, Grid, Col, Icon, Row } from 'native-base';
 import { Global } from '../../constants/Global';
 import StyleCategoryButton from './../../components/StyleCategoryButton';
 import { ListItem } from 'react-native-elements';
+import { connect } from 'react-redux';
 
-export default function OrganisationProfileScreen(props) {
+import { fetchOrgItemsStart, fetchOrgRequestsStart } from '../../common/redux/organization/organization.actions';
 
-  const onGoingTasks = [1, 2, 3, 4, 5]
-
-  const { route } = props;
+function OrganisationProfileScreen(props) {
+  
+  const {fetchOrgRequestsStart, route, organization} = props;
+  const {categories, offices} = organization;
   const { baseUrl } = Global;
-  const organization = route.params;
-  const Image_Http_URL = { uri: baseUrl + organization.ImageUrl };
+  const orgParam = route.params;
+  const Image_Http_URL = { uri: baseUrl + orgParam.ImageUrl };
 
-  const catgeories = [
+  React.useEffect(() => {
+    fetchOrgRequestsStart(orgParam.Id);
+    console.log('props:',props)
+  }, [fetchOrgRequestsStart]);
+
+  props.navigation.setOptions({
+    title: orgParam.Name
+  });
+
+  const organisationOpts = [
     {
-      name: 'All',
-      icon: require('./../../assets/icons/all.png')
-    },
-    {
-      name: 'Food',
+      name: 'Campaigns',
+      route: 'CampaignsList',
       icon: require('./../../assets/icons/food.png')
     },
     {
-      name: 'Health',
-      icon: require('./../../assets/icons/food.png'),
-    },
-    {
-      name: 'Education',
+      name: 'Items',
+      route: 'ItemsList',
       icon: require('./../../assets/icons/food.png')
     },
     {
-      name: 'Grocery',
+      name: 'Volunteers',
+      route: 'VolunteersList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
+      name: 'Accounts',
+      route: 'AccountsList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
+      name: 'Packages',
+      route: 'RequestList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
+      name: 'Requests',
+      route: 'RequestList',
       icon: require('./../../assets/icons/food.png')
     }
   ];
 
-  const locations = [
-    { name: 'Alkhidmar Foundation, 3KM, Khayaban-E-Jinnah, Lahore' },
-    { name: 'Alkhidmar Foundation, 23KM, Saddar, Rawalpindi' },
-    { name: 'Alkhidmar Foundation, 3KM, Khayaban-E-Jinnah, Lahore' },
-    { name: 'Alkhidmar Foundation, 18KM, Modal Town, Lahore' },
-  ]
-
   const goToScreen = (screen) => {
-    props.navigation.push(screen);
+    props.navigation.push(screen, { id: orgParam.Id });
   }
 
   return (
@@ -59,7 +73,7 @@ export default function OrganisationProfileScreen(props) {
           </View>
         </Col>
         <Col style={styles.userInfo}>
-          <Text style={Style.heading}>{organization.Name}</Text>
+          <Text style={Style.heading}>{orgParam.Name}</Text>
           <Row style={Style.mv1}>
             <Col><Button onPress={() => goToScreen('VolunteerList')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Volunteer</Text></Button></Col>
             <Col><Button onPress={() => goToScreen('Donate')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Donate</Text></Button></Col>
@@ -69,22 +83,46 @@ export default function OrganisationProfileScreen(props) {
       </Grid>
 
       <View style={Style.mv1}>
-        <Text style={Style.heading}>Categories</Text>
         <ScrollView horizontal={true} nestedScrollEnabled={true}>
           <View style={styles.grid}>
             {
-              catgeories.map((category, i) => {
-                const { name, icon, selected } = category;
+              organisationOpts.map((option, i) => {
+                const { name, icon, route } = option;
                 return (
-                  <View key={i} style={{ paddingVertical: 12 }}>
+                  <TouchableOpacity onPress={() => goToScreen(route)} key={i} style={{ paddingVertical: 12 }}>
                     <StyleCategoryButton
                       btnStyle={styles.catContainer}
                       title={name}
                       icon={icon}
                     />
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </View>
+        </ScrollView>
+      </View>
+
+
+      <View style={Style.mv1}>
+        <Text style={Style.heading}>Categories</Text>
+        <ScrollView horizontal={true} nestedScrollEnabled={true}>
+          <View style={styles.grid}>
+            {
+              categories ?
+              categories.map((category, i) => {
+                const { Name, ImageUrl } = category;
+                return (
+                  <View key={i} style={{ paddingVertical: 12 }}>
+                    <StyleCategoryButton
+                      btnStyle={styles.catContainer}
+                      title={Name}
+                      icon={ImageUrl!=null?{uri: ImageUrl}:''}
+                    />
                   </View>
                 )
               })
+              : null
             }
           </View>
         </ScrollView>
@@ -94,29 +132,49 @@ export default function OrganisationProfileScreen(props) {
         <Text style={[Style.heading]}>
           About Us
         </Text>
-        <Text>{organization.Description}</Text>
+        <Text>{orgParam.Description}</Text>
       </View>
 
       <View style={Style.mv2}>
         <Text style={[Style.heading, Style.mb2]}>
-          Dropoff locations
+          Offices
         </Text>
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
           {
-            locations.map((l, i) => (
+            offices.map((l, i) => (
               <ListItem
                 key={i}
-                title={l.name}
+                title={l.Name}
+                subtitle={l.Address}
                 bottomDivider
               />
             ))
           }
         </View>
       </View>
+
     </ScrollView>
   );
 }
 
+const mapState = (state) => {
+  const { organization } = state;
+  return {
+    organization
+  }
+}
+
+const mapDispatch = dispatch => ({
+  fetchOrgRequestsStart: (id) => {
+    dispatch(fetchOrgRequestsStart('FETCH_ORG_OFFICES_START', id, 'Offices'));
+    //dispatch(fetchOrgRequestsStart('FETCH_ORG_ATTACHMENTS_START', id, 'Attachments'));
+    dispatch(fetchOrgRequestsStart('FETCH_ORG_CATEGORIES_START', id));
+    dispatch(fetchOrgItemsStart(id));
+  },
+  dispatch
+});
+
+export default connect(mapState, mapDispatch)(OrganisationProfileScreen);
 
 const styles = StyleSheet.create({
   container: {
@@ -163,5 +221,6 @@ const styles = StyleSheet.create({
   },
   catContainer: {
     marginRight: 8,
+    paddingHorizontal: 2
   }
 });

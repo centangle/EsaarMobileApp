@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, ScrollView, View, Text, TextInput } from 'react-native';
 import { ListItem } from 'react-native-elements';
@@ -6,35 +6,38 @@ import Style from '../../constants/Style';
 import Colors from '../../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
-import { fetchOrganizationStart } from '../../common/redux/organization/organization.actions';
+import { fetchOrgRequestsStart } from '../../common/redux/organization/organization.actions';
 import { Global } from '../../constants/Global';
-import HeaderRightOption from '../../components/HeaderRightOption';
-import { Button, Icon } from 'native-base';
 
-const OrganisationsListScreen = ({ data, fetchOrganizationStart, navigation }) => {
-  const selectOrganization = (org) => {
-    //console.log(org)
-    navigation.push('OrganizationProfile', org);
-  }
-
+const ItemsListScreen = ({ items, fetchOrgRequestsStart, id }) => {
   useEffect(() => {
-      fetchOrganizationStart();
-      navigation.setOptions({
-        headerRight: () => (
-          <HeaderRightOption onClick={'AddOrganisation'} icon={'add'} color={'#666'} label={''} navigation={navigation}/>
-        ),
-      });
-  }, [fetchOrganizationStart]);
+    fetchOrgRequestsStart(id);
+  }, [fetchOrgRequestsStart]);
 
   const [searchText, setSearchText] = useState('');
   const [showSearch, setSearch] = useState(false);
-  const {baseUrl} = Global;
+  const { baseUrl } = Global;
+
+  // filter items
+  var mappedItemsArray = items.map(item => item.Item);
+  const [mappedItems, setMappedItems] = useState(mappedItemsArray);
+
+  const searchItem = (word) => {
+    if (word) {
+      const items = mappedItemsArray.filter(asset => {
+        return asset.Name.indexOf(word) > -1;
+      })
+      setMappedItems(items)
+    } else {
+      setMappedItems(items.map(item => item.Item))
+    }
+  }
 
   return (
     <ScrollView style={[Style.pageContainer]}>
       <View>
         <Text style={[styles.heading, Style.mv3]}>
-          Organizations
+          Items List
           </Text>
         <Ionicons
           onPress={() => { setSearch(!showSearch) }}
@@ -46,22 +49,22 @@ const OrganisationsListScreen = ({ data, fetchOrganizationStart, navigation }) =
       {
         showSearch ?
           <TextInput
+          autoFocus={true}
             style={[Style.outerShadow, Style.boxLayout, styles.quantityInput, Style.mb2]}
             placeholder="Search"
-            onChangeText={text => setSearchText(text)}
+            onChangeText={text => searchItem(text)}
             defaultValue={searchText}
           /> : null
       }
       <View style={[Style.outerShadow, Style.defaultRadius, Style.p1, styles.categoriesContainer]}>
         {
-          data.map((l, i) => (
+          mappedItems.map((l, i) => (
             <ListItem
-              onPress={() => selectOrganization(l)}
               key={i}
-              leftAvatar={{ source: { uri: baseUrl+l.ImageUrl } }}
+              leftAvatar={{ source: { uri: baseUrl + l.ImageUrl } }}
               title={l.Name}
+              subtitle={l.Description}
               bottomDivider
-              chevron
             />
           ))
         }
@@ -70,21 +73,22 @@ const OrganisationsListScreen = ({ data, fetchOrganizationStart, navigation }) =
   );
 }
 
-const mapState = (state) => {
+const mapState = (state, getState) => {
   const { organization } = state;
+  const id = getState.route.params.id;
   return {
-    data: Object.keys(organization.organizations).map(key => {
-      return { ...organization.organizations[key], title: organization.organizations[key].Name }
-    })
+    items: organization.items,
+    id
   }
 }
 
 const mapDispatch = dispatch => ({
-  fetchOrganizationStart: () => dispatch(fetchOrganizationStart()),
+  //fetchOrgRequestsStart: (id) => fetchOrgRequestsStart('FETCH_PERIFERAL_ITEMS_START',id),
+  fetchOrgRequestsStart: (id) => dispatch(fetchOrgRequestsStart('FETCH_ORG_ITEMS_START', id)),
   dispatch
 });
 
-export default connect(mapState, mapDispatch)(OrganisationsListScreen);
+export default connect(mapState, mapDispatch)(ItemsListScreen);
 
 
 const styles = StyleSheet.create({

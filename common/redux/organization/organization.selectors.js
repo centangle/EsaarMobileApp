@@ -9,6 +9,18 @@ export const requestsLoading =createSelector(
   [organization],
   organization => organization.requestsLoading
 );
+export const officesLoading=createSelector(
+   [organization],
+  organization => organization.officesLoading
+);
+export const packagesLoading =createSelector(
+  [organization],
+  organization => organization.packagesLoading
+);
+export const campaignsLoading =createSelector(
+  [organization],
+  organization => organization.campaignsLoading
+);
 export const membersLoading = createSelector(
   [organization],
   organization => organization.membersLoading
@@ -24,4 +36,12 @@ export const moderatorJoining=createSelector(
 export const memberJoining=createSelector(
   [organization],
   organization => organization.memberJoining
+);
+export const attachmentsLoading = createSelector(
+   [organization],
+  organization => organization.attachmentsLoading
+)
+export const selectForm = createSelector(
+  [organization],
+  organization => organization.form
 );

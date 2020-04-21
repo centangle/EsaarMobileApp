@@ -7,6 +7,58 @@ export const addOrganizationSuccess = organization => ({
   type: organizationTypes.ADD_ORGANIZATION_SUCCESS,
   payload: organization
 });
+export const addCampaignSuccess = campaign => ({
+  type: organizationTypes.ADD_ORG_CAMPAIGN_SUCCESS,
+  payload: campaign
+});
+export const addAttachmentSuccess = collection => ({
+  type: organizationTypes.ADD_ORG_ATTACHMENT_SUCCESS,
+  payload: collection
+});
+export const addCampaignFailure = error => ({
+  type: organizationTypes.ADD_ORG_CAMPAIGN_FAILURE,
+  payload: error
+});
+export const addAttachmentFailure = error => ({
+  type: organizationTypes.ADD_ORG_ATTACHMENT_FAILURE,
+  payload: error
+});
+export const fetchOrgCategoriesSuccess = collection =>({
+  type: organizationTypes.FETCH_ORG_CATEGORIES_SUCCESS,
+  payload: collection
+});
+export const fetchOrgOfficesSuccess = collection =>({
+  type: organizationTypes.FETCH_ORG_OFFICES_SUCCESS,
+  payload: collection
+});
+export const fetchOrgAccountsSuccess = collection =>({
+  type: organizationTypes.FETCH_ORG_OFFICES_SUCCESS,
+  payload: collection
+});
+export const addPackageSuccess = campaign => ({
+  type: organizationTypes.ADD_ORG_PACKAGE_SUCCESS,
+  payload: campaign
+});
+export const addPackageFailure = error => ({
+  type: organizationTypes.ADD_ORG_PACKAGE_FAILURE,
+  payload: error
+});
+export const addOfficeSuccess = campaign => ({
+  type: organizationTypes.ADD_ORG_OFFICE_SUCCESS,
+  payload: campaign
+});
+export const addOfficeFailure = error => ({
+  type: organizationTypes.ADD_ORG_OFFICE_FAILURE,
+  payload: error
+});
+export const addAccountSuccess = campaign => ({
+  type: organizationTypes.ADD_ORG_ACCOUNT_SUCCESS,
+  payload: campaign
+});
+export const addAccountFailure = error => ({
+  type: organizationTypes.ADD_ORG_ACCOUNT_FAILURE,
+  payload: error
+});
 export const fetchOrganizationSuccess = collections =>({
   type:organizationTypes.FETCH_ORGANIZATION_SUCCESS,
   payload:collections
@@ -22,6 +74,14 @@ export const fetchOrgCampaignsStart = (id)=>({
 })
 export const fetchOrgRequestsSuccess = collections =>({
   type:organizationTypes.FETCH_ORG_REQUESTS_SUCCESS,
+  payload:collections
+});
+export const fetchOrgPackagesSuccess = collections=>({
+  type:organizationTypes.FETCH_ORG_PACKAGES_SUCCESS,
+  payload:collections
+});
+export const fetchOrgCampaignsSuccess = collections=>({
+  type:organizationTypes.FETCH_ORG_CAMPAIGNS_SUCCESS,
   payload:collections
 });
 export const fetchOrgMembersSuccess = collections =>({
@@ -57,6 +117,14 @@ export const requestSuccess = collections =>({
 });
 export const requestFailure = error => ({
   type: organizationTypes.REQUEST_FAILURE,
+  payload: error
+});
+export const fetchOrgOfficesFailure = error => ({
+  type: organizationTypes.FETCH_ORG_OFFICES_FAILURE,
+  payload: error
+});
+export const fetchOrgAccountsFailure = error => ({
+  type: organizationTypes.FETCH_ORG_ACCOUNTS_FAILURE,
   payload: error
 });
 export const fechOrganizationPage = (Id)=>({

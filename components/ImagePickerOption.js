@@ -49,17 +49,27 @@ export default class ImagePickerOption extends React.Component {
 
   _pickImage = async () => {
     try {
+      const {multiImage, isBase64, onChooseImage} = this.props;
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
+        base64: isBase64
       });
+      
       if (!result.cancelled) {
-        this.setState({ images: [...this.state.images, result.uri] });
+        if(multiImage){
+          this.setState({ images: [...this.state.images, result.uri] });
+          onChooseImage(this.state.images);
+        }else{
+          let imgs = [result.uri]
+          this.setState({ images: imgs });
+          onChooseImage(result.uri);
+        }
       }
 
-      console.log(result);
+      //console.log(result);
     } catch (E) {
       console.log(E);
     }

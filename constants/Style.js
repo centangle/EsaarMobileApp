@@ -116,6 +116,7 @@ export default {
     paddingHorizontal: 15,
     paddingVertical: 15,
     backgroundColor: Colors.defaultBackground,
+    marginBottom: 25
   },
   alignCenter: {
     textAlign: 'center'

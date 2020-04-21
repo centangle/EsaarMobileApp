@@ -1,55 +1,95 @@
 import { organizationTypes } from './organization.types';
 import { Toast } from 'native-base';
+import { Messages } from '../../../constants/Messages';
 
 const INITIAL_STATE = {
   sider: false,
   organizations: [],
   requests: [],
-  campaigns:[],
+  campaigns: [],
+  categories:[],
   items: [],
+  packages: [],
   current: {},
-  campaignsLoading:false,
+  offices:[],
+  campaignsLoading: false,
   itemsLoading: false,
   requestsLoading: false,
-  membersLoading:false,
-  volunteerJoining:false,
-  moderatorJoining:false,
-  memberJoining:false
+  packagesLoading:false,
+  membersLoading: false,
+  officesLoading:false,
+  attachmentsLoading:false,
+  accountsLoading:false,
+  volunteerJoining: false,
+  moderatorJoining: false,
+  memberJoining: false,
+  logo: null,
+  form:{}
 };
 
 const organization = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'FETCH_ORG_CAMPAIGN_START':
-      return{
+    case 'FETCH_ORG_CAMPAIGNS_START':
+      return {
         ...state,
-        campaignsLoading:true
+        campaignsLoading: true
       }
-    case 'FETCH_ORG_CAMPAIGN_SUCCESS':
+    case 'UPLOAD_SUCCESS':
+      return {
+        ...state,
+        logo: action.uploadType === 'Logo' ? action.meta : null
+      }
+    case 'ADD_ORGANIZATION_START':
       return{
         ...state,
-        campaigns:action.payload,
-        campaignsLoading:false
+        form:{...action.payload,modal:true}
+      }
+    case 'ADD_ORGANIZATION_SUCCESS':
+      Toast.show({
+        text: Messages.Organisation_Added_Success,
+        duration: 3000
+      })
+      return {
+        ...state,
+        logo: null,
+        form:{modal:false,...action.payload}
+      }
+    case 'ADD_ORGANIZATION_FAILURE':
+      return {
+        ...state,
+        form:{...state.form,error:action.payload}
+      }
+    case 'FETCH_ORG_OFFICES_SUCCESS':
+      return{
+        ...state,
+        offices:action.payload.result
+      }
+    case 'FETCH_ORG_CAMPAIGNS_SUCCESS':
+      return {
+        ...state,
+        campaigns: action.payload,
+        campaignsLoading: false
       }
     case 'REQUEST_START':
-      return{
+      return {
         ...state,
-        volunteerJoining:action.payload.Type==="Volunteer",
-        moderatorJoining:action.payload.Type==="Moderator",
-        memberJoining:action.payload.Type==='Member'
+        volunteerJoining: action.payload.Type === "Volunteer",
+        moderatorJoining: action.payload.Type === "Moderator",
+        memberJoining: action.payload.Type === 'Member'
       }
     case 'REQUEST_SUCCESS':
     case 'REQUEST_FAILURE':
-      if(action.payload.result && action.payload.result.ExceptionMessage)
-      Toast.show({
-        text: action.payload.result.ExceptionMessage,
-        duration: 4000
-      });
+      if (action.payload.result && action.payload.result.ExceptionMessage)
+        Toast.show({
+          text: action.payload.result.ExceptionMessage,
+          duration: 3000
+        })
       //alert(action.payload.result.ExceptionMessage);
-      return{
+      return {
         ...state,
-        volunteerJoining:false,
-        moderatorJoining:false,
-        memberJoining:false
+        volunteerJoining: false,
+        moderatorJoining: false,
+        memberJoining: false
       }
     case 'FETCH_ORG_REQUESTS_START':
       return {
@@ -73,16 +113,52 @@ const organization = (state = INITIAL_STATE, action) => {
         requests: action.payload
       }
     case 'FETCH_ORG_MEMBERS_SUCCESS':
-      return{
+      return {
         ...state,
-        membersLoading:false,
-        members:action.payload
+        membersLoading: false,
+        members: action.payload
       }
     case 'FETCH_ORG_ITEMS_SUCCESS':
       return {
         ...state,
         items: action.payload,
         itemsLoading: false
+      }
+    case 'FETCH_ORG_PACKAGES_START':
+      return {
+        ...state,
+        packagesLoading: true
+      }
+    case 'FETCH_ORG_PACKAGES_SUCCESS':
+      return {
+        ...state,
+        packages: action.payload,
+        packagesLoading: false
+      }
+    case 'FETCH_ORG_PACKAGES_FAILURE':
+      return {
+        ...state,
+        packagesLoading:false
+      }
+    case 'OPEN_MODAL':
+      return{
+        ...state,
+        form:{
+          ...state.form,
+          modal:true
+        }
+      }
+      case 'CLOSE_MODAL':
+      return{
+        ...state,
+        form:{
+          modal:false
+        }
+      }
+    case 'FETCH_ORG_CATEGORIES_SUCCESS':
+      return{
+        ...state,
+        categories:action.payload
       }
     case 'FETCH_ORGANIZATION_SUCCESS':
       return {
@@ -101,9 +177,9 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         current: action.payload.result,
-        organizations:{
+        organizations: {
           ...state.organizations,
-          [action.payload.result.Id]:action.payload.result
+          [action.payload.result.Id]: action.payload.result
         }
       }
     case organizationTypes.ADD_ORGANIZATION_START:

@@ -17,6 +17,14 @@ import LoginScreen from './screens/LoginScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import OrganisationsListScreen from './screens/organisation/OrganisationsListScreen';
 import OrganisationProfileScreen from './screens/organisation/OrganisationProfileScreen';
+import AddOrganisationScreen from './screens/organisation/AddOrganisationScreen';
+import LogoTitle from './components/LogoTitle';
+import { Button } from 'native-base';
+import HeaderRightOption from './components/HeaderRightOption';
+import ItemsListScreen from './screens/organisation/ItemsListScreen';
+import OrganisationCampaignsScreen from './screens/organisation/OrganisationCampaignsScreen';
+import OrganisationVolunteersScreen from './screens/organisation/OrganisationVolunteersScreen';
+import OrganisationAccountsScreen from './screens/organisation/OrganisationAccountsScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -38,17 +46,17 @@ function MainApp(props) {
         setLoadingComplete(true);
       }
     }
-    
+
     loadResourcesAndDataAsync();
   }, []);
-
+  //console.log('props.user: ', props.user)
   return (
     <View style={styles.container}>
       {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
       <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
         <Stack.Navigator>
           {
-            props.user===null ?
+            props.user === undefined ?
               <Stack.Screen name="Root" component={LoginScreen} /> :
               <Stack.Screen name="Root" component={BottomTabNavigator} />
           }
@@ -58,8 +66,13 @@ function MainApp(props) {
           <Stack.Screen name="VolunteerList" component={VolunteerListScreen} />
           <Stack.Screen name="Task" component={TaskScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="Organizations" component={OrganisationsListScreen} />
-          <Stack.Screen name="OrganizationProfile" component={OrganisationProfileScreen} />
+          <Stack.Screen name="Organizations" component={OrganisationsListScreen}/>
+          <Stack.Screen name="OrganizationProfile" component={OrganisationProfileScreen}/>
+          <Stack.Screen name="AddOrganisation" component={AddOrganisationScreen} />
+          <Stack.Screen name="ItemsList" component={ItemsListScreen} />
+          <Stack.Screen name="CampaignsList" component={OrganisationCampaignsScreen} />
+          <Stack.Screen name="VolunteersList" component={OrganisationVolunteersScreen} />
+          <Stack.Screen name="AccountsList" component={OrganisationAccountsScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
   <Drawer.Screen name="Root" component={BottomTabNavigator} />
