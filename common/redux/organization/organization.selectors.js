@@ -9,6 +9,10 @@ export const requestsLoading =createSelector(
   [organization],
   organization => organization.requestsLoading
 );
+export const accountsLoading = createSelector(
+  [organization],
+  organization => organization.accountsLoading
+);
 export const officesLoading=createSelector(
    [organization],
   organization => organization.officesLoading

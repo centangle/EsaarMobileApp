@@ -9,3 +9,7 @@ export const isLoading = createSelector(
   [settings],
   settings => settings.isLoading
 );
+export const uomLoading = createSelector(
+  [settings],
+  settings => settings.uomLoading
+);

@@ -7,24 +7,25 @@ const INITIAL_STATE = {
   organizations: [],
   requests: [],
   campaigns: [],
-  categories:[],
+  categories: [],
   items: [],
   packages: [],
   current: {},
-  offices:[],
+  offices: [],
+  accounts: [],
   campaignsLoading: false,
   itemsLoading: false,
   requestsLoading: false,
-  packagesLoading:false,
+  packagesLoading: false,
   membersLoading: false,
-  officesLoading:false,
-  attachmentsLoading:false,
-  accountsLoading:false,
+  officesLoading: false,
+  accountsLoading: false,
+  attachmentsLoading: false,
   volunteerJoining: false,
   moderatorJoining: false,
   memberJoining: false,
   logo: null,
-  form:{}
+  form: {}
 };
 
 const organization = (state = INITIAL_STATE, action) => {
@@ -39,11 +40,23 @@ const organization = (state = INITIAL_STATE, action) => {
         ...state,
         logo: action.uploadType === 'Logo' ? action.meta : null
       }
+    case 'ADD_ORG_ATTACHMENT_START':
+    case 'ADD_ORG_OFFICE_START':
+    case 'ADD_ORG_ACCOUNT_START':
+    case 'ADD_ORG_CAMPAIGN_START':
+    case 'ADD_ORG_ITEMS_START':
+    case 'ADD_ORG_PACKAGE_START':
     case 'ADD_ORGANIZATION_START':
-      return{
+      return {
         ...state,
-        form:{...action.payload,modal:true}
+        form: { ...action.payload, modal: true }
       }
+    case 'ADD_ORG_ATTACHMENT_SUCCESS':
+    case 'ADD_ORG_OFFICE_SUCCESS':
+    case 'ADD_ORG_ACCOUNT_SUCCESS':
+    case 'ADD_ORG_CAMPAIGN_SUCCESS':
+    case 'ADD_ORG_ITEMS_SUCCESS':
+    case 'ADD_ORG_PACKAGE_SUCCESS':
     case 'ADD_ORGANIZATION_SUCCESS':
       Toast.show({
         text: Messages.Organisation_Added_Success,
@@ -52,17 +65,52 @@ const organization = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         logo: null,
-        form:{modal:false,...action.payload}
+        form: { modal: false, ...action.payload },
       }
+    case 'ADD_ORG_ATTACHMENT_FAILURE':
+    case 'ADD_ORG_OFFICE_FAILURE':
+    case 'ADD_ORG_ACCOUNT_FAILURE':
+    case 'ADD_ORG_CAMPAIGN_FAILURE':
+    case 'ADD_ORG_ITEMS_FAILURE':
+    case 'ADD_ORG_PACKAGE_FAILURE':
     case 'ADD_ORGANIZATION_FAILURE':
       return {
         ...state,
-        form:{...state.form,error:action.payload}
+        form: { ...state.form, error: action.payload,modal:true }
+      }
+    
+    case 'FETCH_ORG_OFFICES_START':
+      return {
+        ...state,
+        officesLoading: true
       }
     case 'FETCH_ORG_OFFICES_SUCCESS':
-      return{
+      return {
         ...state,
-        offices:action.payload.result
+        officesLoading: false,
+        offices: action.payload.result
+      }
+    case 'FETCH_ORG_ACCOUNTS_START':
+      return {
+        ...state,
+        accountsLoading: true
+      }
+    case 'FETCH_ORG_ACCOUNTS_SUCCESS':
+      return {
+        ...state,
+        accountsLoading: false,
+        accounts: action.payload.result
+      }
+    case 'FETCH_ORG_ATTACHMENTS_START':
+      return {
+        ...state,
+        attachmentsLoading: true
+      }
+    case 'FETCH_ORG_ATTACHMENTS_SUCCESS':
+      return {
+        ...state,
+        attachmentsLoading: false,
+        attachments: action.payload.result
       }
     case 'FETCH_ORG_CAMPAIGNS_SUCCESS':
       return {
@@ -138,27 +186,27 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'FETCH_ORG_PACKAGES_FAILURE':
       return {
         ...state,
-        packagesLoading:false
+        packagesLoading: false
       }
     case 'OPEN_MODAL':
-      return{
+      return {
         ...state,
-        form:{
+        form: {
           ...state.form,
-          modal:true
+          modal: true
         }
       }
-      case 'CLOSE_MODAL':
-      return{
+    case 'CLOSE_MODAL':
+      return {
         ...state,
-        form:{
-          modal:false
+        form: {
+          modal: false
         }
       }
     case 'FETCH_ORG_CATEGORIES_SUCCESS':
-      return{
+      return {
         ...state,
-        categories:action.payload
+        categories: action.payload
       }
     case 'FETCH_ORGANIZATION_SUCCESS':
       return {
@@ -182,22 +230,10 @@ const organization = (state = INITIAL_STATE, action) => {
           [action.payload.result.Id]: action.payload.result
         }
       }
-    case organizationTypes.ADD_ORGANIZATION_START:
-      return {
-        ...state
-      }
-    case 'ADD_ORG_ITEMS_START':
-      return {
-        ...state,
-      }
     case 'ADD_ORG_ITEMS_SUCCESS':
       return {
         ...state,
         items: [...state.items, { ...action.payload.request, Id: action.payload.organization }]
-      }
-    case 'ADD_ORG_ITEMS_FAILURE':
-      return {
-        ...state
       }
     case 'REMOVE_ORG_ITEMS_START':
       return {

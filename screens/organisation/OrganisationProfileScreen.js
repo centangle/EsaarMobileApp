@@ -39,8 +39,18 @@ function OrganisationProfileScreen(props) {
       icon: require('./../../assets/icons/food.png')
     },
     {
+      name: 'Regions',
+      route: 'RegionsList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
       name: 'Volunteers',
       route: 'VolunteersList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
+      name: 'Members',
+      route: 'MembersList',
       icon: require('./../../assets/icons/food.png')
     },
     {
@@ -49,13 +59,18 @@ function OrganisationProfileScreen(props) {
       icon: require('./../../assets/icons/food.png')
     },
     {
+      name: 'Attachments',
+      route: 'AttachmentsList',
+      icon: require('./../../assets/icons/food.png')
+    },
+    {
       name: 'Packages',
-      route: 'RequestList',
+      route: 'PackagesList',
       icon: require('./../../assets/icons/food.png')
     },
     {
       name: 'Requests',
-      route: 'RequestList',
+      route: 'OrgRequestList',
       icon: require('./../../assets/icons/food.png')
     }
   ];
@@ -170,6 +185,7 @@ const mapDispatch = dispatch => ({
     //dispatch(fetchOrgRequestsStart('FETCH_ORG_ATTACHMENTS_START', id, 'Attachments'));
     dispatch(fetchOrgRequestsStart('FETCH_ORG_CATEGORIES_START', id));
     dispatch(fetchOrgItemsStart(id));
+    dispatch(fetchOrgRequestsStart('FETCH_ORG_MEMBERS_START',id,'Owner'))
   },
   dispatch
 });

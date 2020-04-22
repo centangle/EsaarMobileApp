@@ -15,6 +15,10 @@ export const addAttachmentSuccess = collection => ({
   type: organizationTypes.ADD_ORG_ATTACHMENT_SUCCESS,
   payload: collection
 });
+export const fetchOrgAttachmentsSuccess = collection =>({
+  type: organizationTypes.FETCH_ORG_ATTACHMENTS_SUCCESS,
+  payload: collection
+});
 export const addCampaignFailure = error => ({
   type: organizationTypes.ADD_ORG_CAMPAIGN_FAILURE,
   payload: error
@@ -32,7 +36,7 @@ export const fetchOrgOfficesSuccess = collection =>({
   payload: collection
 });
 export const fetchOrgAccountsSuccess = collection =>({
-  type: organizationTypes.FETCH_ORG_OFFICES_SUCCESS,
+  type: organizationTypes.FETCH_ORG_ACCOUNTS_SUCCESS,
   payload: collection
 });
 export const addPackageSuccess = campaign => ({

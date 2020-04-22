@@ -4,29 +4,40 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import Style from '../../constants/Style';
 import Colors from '../../constants/Colors';
+import { fetchUomStart } from '../../common/redux/setting/setting.actions';
 import { fetchOrgRequestsStart } from '../../common/redux/organization/organization.actions';
 
 const OrganisationAccountsScreen = (props) => {
-  const {fetchOrgRequestsStart, campaigns, route} = props;
+  const {fetchOrgRequestsStart, campaigns, route, accounts} = props;
   const orgParam = route.params;
+  const {id} = orgParam;
 
   React.useEffect(() => {
-    fetchOrgRequestsStart(orgParam.id);
+    fetchOrgRequestsStart('FETCH_ORG_ACCOUNTS_START',id,'Accounts')
   }, [fetchOrgRequestsStart]);
+
+  const mappedData = accounts.map(request => {
+      return {
+          Name: request.Name,
+          NativeName: request.NativeName,
+          Description: request.Description,
+          AccountNo: request.AccountNo
+      }
+  });
 
   return (
     <ScrollView style={[Style.pageContainer]}>
       <View style={Style.mv2}>
         <Text style={[Style.heading, Style.mb2]}>
-          Volunteers
+          Accounts
         </Text>
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
           {
-            campaigns.map((l, i) => (
+            mappedData.map((l, i) => (
               <ListItem
                 key={i}
                 title={l.Name}
-                subtitle={l.Description}
+                subtitle={l.Description+', '+l.AccountNo}
                 bottomDivider
               />
             ))
@@ -39,19 +50,22 @@ const OrganisationAccountsScreen = (props) => {
 
 const mapState = (state, getState) => {
   const { organization } = state;
-  const { campaigns } = organization;
+  const { accounts } = organization;
+  console.log('accounts: ', accounts)
   return {
-    campaigns
+    accounts
   }
 }
 
 const mapDispatch = dispatch => ({
-  fetchOrgRequestsStart: (id) => dispatch(fetchOrgRequestsStart('FETCH_ORG_MEMBERS', id)),
+  fetchOrgRequestsStart: (type,id,userType) => {
+    dispatch(fetchOrgRequestsStart(type,id,userType));
+    dispatch(fetchUomStart())
+  },
   dispatch
 });
 
 export default connect(mapState, mapDispatch)(OrganisationAccountsScreen);
-
 
 const styles = StyleSheet.create({
   heading: {

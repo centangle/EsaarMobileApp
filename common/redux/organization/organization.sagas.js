@@ -20,6 +20,7 @@ import {
     fetchOrgMembersSuccess,
     fetchOrgAccountsSuccess,
     fetchOrgOfficesSuccess,
+    fetchOrgAttachmentsSuccess,
     requestSuccess, requestFailure,
     addOrgItemSuccess, addOrgItemFailure,
     removeOrgItemSuccess, removeOrgItemFailure
@@ -59,7 +60,7 @@ export function* fetchOrgAccountsAsync(action) {
         if (response.status >= 205) {
             return { result, error: true };
         }
-        return { ok: true, result };
+        return { ok: true, result:result.Items };
     });
     if (response.ok) {
         yield put(fetchOrgAccountsSuccess(response));
@@ -83,6 +84,26 @@ export function* fetchOrgOfficesAsync(action) {
     });
     if (response.ok) {
         yield put(fetchOrgOfficesSuccess(response));
+    }
+}
+export function* fetchOrgAttachmentsAsync(action){
+    const currentUser = yield select(selectCurrentUser);
+    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/OrganizationAttachment/GetPaginated?"+q, {
+        method: "GET",
+        withCredentials: true,
+        credentials: 'include',
+        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+        //credentials: "include"
+    }).then(async (response) => {
+        const result = await response.json();
+        if (response.status >= 205) {
+            return { result, error: true };
+        }
+        return { ok: true, result:result.Items };
+    });
+    if (response.ok) {
+        yield put(fetchOrgAttachmentsSuccess(response));
     }
 }
 export function* addOrganizationAsync(action) {
@@ -196,15 +217,15 @@ export function* addOfficeAsync(action){
 export function* addAttachmentsAsync(action){
     try {
         const currentUser = yield select(selectCurrentUser);
-        //const q = 'organizationId='+action.payload.organizationId+'&attachments='+action.payload.attachments;
-        const organization = yield fetch(url + "/api/OrganizationAttachment/Create", {
+        const q = 'organizationId='+action.payload.organizationId;//+'&attachments='+action.payload.attachments;
+        const organization = yield fetch(url + "/api/OrganizationAttachment/Create?"+q, {
             method: 'PUT',
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + currentUser.access_token
             },
-            body: JSON.stringify(action.payload)
+            body: JSON.stringify(action.payload.attachments)
         }).then(async (response) => {
             if (response.status >= 205) {
                 const result = await response.json();
@@ -581,14 +602,18 @@ export function* addOffice() {
     yield takeEvery(organizationTypes.ADD_ORG_OFFICE_START, addOfficeAsync);
 }
 export function* fetchOrgAccounts() {
-    yield takeEvery(organizationTypes.ADD_ORG_ACCOUNT_START, fetchOrgAccountsAsync);
+    yield takeEvery(organizationTypes.FETCH_ORG_ACCOUNTS_START, fetchOrgAccountsAsync);
 }
 export function* fetchOrgOffices() {
     yield takeEvery(organizationTypes.FETCH_ORG_OFFICES_START, fetchOrgOfficesAsync);
 }
+export function* fetchOrgAttachments() {
+    yield takeEvery(organizationTypes.FETCH_ORG_ATTACHMENTS_START, fetchOrgAttachmentsAsync);
+}
 export function* addAttachments(){
     yield takeEvery(organizationTypes.ADD_ORG_ATTACHMENT_START, addAttachmentsAsync)
 }
+
 export function* organizationSagas() {
     yield all([
         call(orgRequest),
@@ -598,6 +623,7 @@ export function* organizationSagas() {
         call(addPackage),
         call(addOffice),
         call(addAttachments),
+        call(addAccount),
         call(changeOrder),
         call(fetchOrganization),
         call(fetchOrgDetail),
@@ -609,6 +635,7 @@ export function* organizationSagas() {
         call(fetchOrgCampaign),
         call(fetchOrgAccounts),
         call(fetchOrgOffices),
+        call(fetchOrgAttachments),
         call(removeItem),
         call(logoUpload)
 

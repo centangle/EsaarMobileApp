@@ -25,6 +25,11 @@ import ItemsListScreen from './screens/organisation/ItemsListScreen';
 import OrganisationCampaignsScreen from './screens/organisation/OrganisationCampaignsScreen';
 import OrganisationVolunteersScreen from './screens/organisation/OrganisationVolunteersScreen';
 import OrganisationAccountsScreen from './screens/organisation/OrganisationAccountsScreen';
+import OrganisationAttachmentsScreen from './screens/organisation/OrganisationAttachmentsScreen';
+import OrganisationMembersScreen from './screens/organisation/OrganisationMembersScreen';
+import OrganisationPackagesScreen from './screens/organisation/OrganisationPackagesScreen';
+import OrganisationRequestsScreen from './screens/organisation/OrganisationRequestsScreen';
+import OrganisationRegionsScreen from './screens/organisation/OrganisationRegionsScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -73,6 +78,11 @@ function MainApp(props) {
           <Stack.Screen name="CampaignsList" component={OrganisationCampaignsScreen} />
           <Stack.Screen name="VolunteersList" component={OrganisationVolunteersScreen} />
           <Stack.Screen name="AccountsList" component={OrganisationAccountsScreen} />
+          <Stack.Screen name="AttachmentsList" component={OrganisationAttachmentsScreen} />
+          <Stack.Screen name="MembersList" component={OrganisationMembersScreen} />
+          <Stack.Screen name="PackagesList" component={OrganisationPackagesScreen} />
+          <Stack.Screen name="OrgRequestList" component={OrganisationRequestsScreen} />
+          <Stack.Screen name="RegionsList" component={OrganisationRegionsScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
   <Drawer.Screen name="Root" component={BottomTabNavigator} />

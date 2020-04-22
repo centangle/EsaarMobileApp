@@ -13,7 +13,9 @@ export default function StyleCategoryButton(props) {
           source={icon}
           style={styles.image}
         />
-        <Text style={styles.text}>{title}</Text>
+        {
+          title ? <Text style={styles.text}>{title}</Text>:null
+        }
     </View>
   );
 }
@@ -24,6 +26,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 14,
     alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#fbfbfb',
     borderColor: 'transparent',
     borderWidth: 1,
