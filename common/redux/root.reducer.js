@@ -10,6 +10,7 @@ import organization from './organization/organization.reducers';
 import request from './request/request.reducers';
 import upload from './upload/upload.reducer';
 import donation from './donation/donation.reducers';
+import region from './region/region.reducers';
 import { AsyncStorage } from "react-native";
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   organization,
   request,
   upload,
-  donation
+  donation,
+  region
 });
 export default persistReducer(persistConfig, rootReducer);

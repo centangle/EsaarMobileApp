@@ -49,3 +49,7 @@ export const selectForm = createSelector(
   [organization],
   organization => organization.form
 );
+export const regionsLoading = createSelector(
+   [organization],
+  organization => organization.regionsLoading
+);

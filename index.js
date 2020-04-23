@@ -30,6 +30,7 @@ import OrganisationMembersScreen from './screens/organisation/OrganisationMember
 import OrganisationPackagesScreen from './screens/organisation/OrganisationPackagesScreen';
 import OrganisationRequestsScreen from './screens/organisation/OrganisationRequestsScreen';
 import OrganisationRegionsScreen from './screens/organisation/OrganisationRegionsScreen';
+import OrganisationJoinVolunteerScreen from './screens/organisation/OrganisationJoinVolunteerScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -83,6 +84,7 @@ function MainApp(props) {
           <Stack.Screen name="PackagesList" component={OrganisationPackagesScreen} />
           <Stack.Screen name="OrgRequestList" component={OrganisationRequestsScreen} />
           <Stack.Screen name="RegionsList" component={OrganisationRegionsScreen} />
+          <Stack.Screen name="JoinAsVolunteer" component={OrganisationJoinVolunteerScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
   <Drawer.Screen name="Root" component={BottomTabNavigator} />

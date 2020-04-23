@@ -8,11 +8,11 @@ export default function StyleCategoryButton(props) {
   const { icon, title, selected, btnStyle } = props;
   return (
     <View style={[Style.outerShadow, styles.btnWrapper, selected ? styles.innerShadow : null, btnStyle]}>
-        <Image
+        { icon ? <Image
           resizeMode={'contain'}
           source={icon}
           style={styles.image}
-        />
+        />: null}
         {
           title ? <Text style={styles.text}>{title}</Text>:null
         }

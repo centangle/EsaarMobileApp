@@ -151,6 +151,33 @@ export function* updateRequestAsync(action) {
         yield put(addRequestFailure(error));
     }
 }
+export function* modifyRegionsAsync(action){
+    try {
+        const currentUser = yield select(selectCurrentUser);
+        const request = yield fetch(url + "/api/OrganizationMember/UpdateOrganizationMembershipRegions", {
+            method: 'POST',
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + currentUser.access_token
+            },
+            body: JSON.stringify(action.payload)
+        }).then(async (response) => {
+            if (response.status >= 205) {
+                const result = await response.json();
+                return { result, error: true };
+            }
+            return response.json();
+        });
+        if (request.error) {
+            yield put(addRequestFailure(request));
+        } else {
+            yield put(addRequestSuccess({ request }));
+        }
+    } catch (error) {
+        yield put(addRequestFailure(error));
+    }
+}
 export function* assignRequestAsync(action){
     try {
         const currentUser = yield select(selectCurrentUser);
@@ -200,6 +227,9 @@ export function* fetchRequestStatus() {
 export function* assignRequest(){
     yield takeLatest(requestTypes.ASSIGN_REQUEST_START,assignRequestAsync)
 }
+export function* modifyRegions(){
+    yield takeLatest(requestTypes.MODIFY_REQUEST_REGIONS,modifyRegionsAsync)
+}
 export function* requestSagas() {
     yield all([
         call(addRequestStart),
@@ -208,6 +238,7 @@ export function* requestSagas() {
         call(fetchRequest),
         call(fetchThread),
         call(fetchRequestStatus),
-        call(assignRequest)
+        call(assignRequest),
+        call(modifyRegions)
     ]);
 }

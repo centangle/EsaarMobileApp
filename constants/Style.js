@@ -82,6 +82,12 @@ export default {
   mv5: {
     marginVertical: 25
   },
+  mt1:{
+    marginTop: 5
+  },
+  mt2:{
+    marginTop: 10
+  },
   mb1: {
     marginBottom: 5
   },

@@ -11,6 +11,8 @@ import {
     addAccountFailure,
     addAttachmentFailure,
     addAttachmentSuccess,
+    addOrgRegionFailure,
+    addOrgRegionSuccess,
     fetchOrganizationSuccess,
     fetchOrgDetailSuccess, fetchOrgItemsSuccess,
     fetchOrgRequestsSuccess,
@@ -21,6 +23,7 @@ import {
     fetchOrgAccountsSuccess,
     fetchOrgOfficesSuccess,
     fetchOrgAttachmentsSuccess,
+    fetchOrgRegionsSuccess,
     requestSuccess, requestFailure,
     addOrgItemSuccess, addOrgItemFailure,
     removeOrgItemSuccess, removeOrgItemFailure
@@ -104,6 +107,26 @@ export function* fetchOrgAttachmentsAsync(action){
     });
     if (response.ok) {
         yield put(fetchOrgAttachmentsSuccess(response));
+    }
+}
+export function* fetchOrgRegionsAsync(action){
+    const currentUser = yield select(selectCurrentUser);
+    const q = "organizationId=" + action.payload + "&recordsPerPage=0&currentPage=1&orderDir=Asc&disablePagination=true";
+    const response = yield fetch(url + "/api/OrganizationRegion/GetPaginated?"+q, {
+        method: "GET",
+        withCredentials: true,
+        credentials: 'include',
+        headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+        //credentials: "include"
+    }).then(async (response) => {
+        const result = await response.json();
+        if (response.status >= 205) {
+            return { result, error: true };
+        }
+        return { ok: true, result:result.Items };
+    });
+    if (response.ok) {
+        yield put(fetchOrgRegionsSuccess(response));
     }
 }
 export function* addOrganizationAsync(action) {
@@ -240,6 +263,34 @@ export function* addAttachmentsAsync(action){
         }
     } catch (error) {
         yield put(addAttachmentFailure(error));
+    }
+}
+export function* addOrgRegionAsyn(action){
+     try {
+        const currentUser = yield select(selectCurrentUser);
+        const q = 'organizationId='+action.payload.organizationId;//+'&attachments='+action.payload.attachments;
+        const organization = yield fetch(url + "/api/OrganizationRegion/Modify?"+q, {
+            method: 'POST',
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + currentUser.access_token
+            },
+            body: JSON.stringify(action.payload.regions)
+        }).then(async (response) => {
+            if (response.status >= 205) {
+                const result = await response.json();
+                return { result, error: true };
+            }
+            return response.json();
+        });
+        if (organization.error) {
+            yield put(addOrgRegionFailure(organization));
+        } else {
+            yield put(addOrgRegionSuccess({ organization }));
+        }
+    } catch (error) {
+        yield put(addOrgRegionFailure(error));
     }
 }
 export function* addAccountAsync(action){
@@ -613,7 +664,12 @@ export function* fetchOrgAttachments() {
 export function* addAttachments(){
     yield takeEvery(organizationTypes.ADD_ORG_ATTACHMENT_START, addAttachmentsAsync)
 }
-
+export function* addOrgRegion(){
+    yield takeEvery(organizationTypes.ADD_ORG_REGION_START, addOrgRegionAsyn)
+}
+export function* fetchOrgRegions(){
+    yield takeEvery(organizationTypes.FETCH_ORG_REGIONS_START, fetchOrgRegionsAsync)
+}
 export function* organizationSagas() {
     yield all([
         call(orgRequest),
@@ -624,6 +680,7 @@ export function* organizationSagas() {
         call(addOffice),
         call(addAttachments),
         call(addAccount),
+        call(addOrgRegion),
         call(changeOrder),
         call(fetchOrganization),
         call(fetchOrgDetail),
@@ -636,6 +693,7 @@ export function* organizationSagas() {
         call(fetchOrgAccounts),
         call(fetchOrgOffices),
         call(fetchOrgAttachments),
+        call(fetchOrgRegions),
         call(removeItem),
         call(logoUpload)
 

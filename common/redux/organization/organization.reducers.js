@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   current: {},
   offices: [],
   accounts: [],
+  regions: [],
   campaignsLoading: false,
   itemsLoading: false,
   requestsLoading: false,
@@ -23,6 +24,7 @@ const INITIAL_STATE = {
   attachmentsLoading: false,
   volunteerJoining: false,
   moderatorJoining: false,
+  regionsLoading: false,
   memberJoining: false,
   logo: null,
   form: {}
@@ -56,6 +58,7 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORG_ACCOUNT_SUCCESS':
     case 'ADD_ORG_CAMPAIGN_SUCCESS':
     case 'ADD_ORG_ITEMS_SUCCESS':
+    case 'ADD_ORG_ITEMS_SUCCESS':
     case 'ADD_ORG_PACKAGE_SUCCESS':
     case 'ADD_ORGANIZATION_SUCCESS':
       Toast.show({
@@ -76,9 +79,9 @@ const organization = (state = INITIAL_STATE, action) => {
     case 'ADD_ORGANIZATION_FAILURE':
       return {
         ...state,
-        form: { ...state.form, error: action.payload,modal:true }
+        form: { ...state.form, error: action.payload, modal: true }
       }
-    
+
     case 'FETCH_ORG_OFFICES_START':
       return {
         ...state,
@@ -118,6 +121,17 @@ const organization = (state = INITIAL_STATE, action) => {
         campaigns: action.payload,
         campaignsLoading: false
       }
+    case 'FETCH_ORG_REGIONS_START':
+      return {
+        ...state,
+        regionsLoading: true
+      }
+    case 'FETCH_ORG_REGIONS_SUCCESS':
+      return {
+        ...state,
+        regions: action.payload.result,
+        regionsLoading: false,
+      }
     case 'REQUEST_START':
       return {
         ...state,
@@ -130,7 +144,7 @@ const organization = (state = INITIAL_STATE, action) => {
       if (action.payload.result && action.payload.result.ExceptionMessage)
         Toast.show({
           text: action.payload.result.ExceptionMessage,
-          duration: 3000
+          duration: 5000
         })
       //alert(action.payload.result.ExceptionMessage);
       return {

@@ -8,8 +8,9 @@ import Style from '../constants/Style';
 import Colors from './../constants/Colors';
 import ArrowRight from './../components/ArrowRight';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
 
-export default class DonateListScreen extends React.Component {
+class DonateListScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,13 +83,13 @@ export default class DonateListScreen extends React.Component {
             })
           }
         </ScrollView>
-        <View style={[Style.outerShadow, Style.defaultRadius, Style.mv2]}>
+        {/* <View style={[Style.outerShadow, Style.defaultRadius, Style.mv2]}>
           <TouchableOpacity style={Style.boxLayout}>
             <Text style={[Colors.themeColorPrimary, styles.heading, styles.sendToAllBtn]}>Send to all organisations</Text>
             <ArrowRight blue={true} />
           </TouchableOpacity>
         </View>
-        <Text style={[Style.fontSizeNormal, Style.defaultColor, Style.mv1]}>OR</Text>
+        <Text style={[Style.fontSizeNormal, Style.defaultColor, Style.mv1]}>OR</Text> */}
         <View>
         <Text style={[styles.heading, Style.mv3]}>
           Select Organization
@@ -119,6 +120,8 @@ export default class DonateListScreen extends React.Component {
     );
   }
 }
+
+export default connect()(DonateListScreen);
 
 
 const styles = StyleSheet.create({

@@ -16,15 +16,16 @@ function OrganisationProfileScreen(props) {
   const {categories, offices} = organization;
   const { baseUrl } = Global;
   const orgParam = route.params;
-  const Image_Http_URL = { uri: baseUrl + orgParam.ImageUrl };
+  const {ImageUrl, Name, Id, Description} = orgParam;
+  const Image_Http_URL = { uri: baseUrl + ImageUrl };
 
   React.useEffect(() => {
-    fetchOrgRequestsStart(orgParam.Id);
+    fetchOrgRequestsStart(Id);
     console.log('props:',props)
   }, [fetchOrgRequestsStart]);
 
   props.navigation.setOptions({
-    title: orgParam.Name
+    title: Name
   });
 
   const organisationOpts = [
@@ -76,7 +77,7 @@ function OrganisationProfileScreen(props) {
   ];
 
   const goToScreen = (screen) => {
-    props.navigation.push(screen, { id: orgParam.Id });
+    props.navigation.push(screen, { id: Id });
   }
 
   return (
@@ -90,7 +91,7 @@ function OrganisationProfileScreen(props) {
         <Col style={styles.userInfo}>
           <Text style={Style.heading}>{orgParam.Name}</Text>
           <Row style={Style.mv1}>
-            <Col><Button onPress={() => goToScreen('VolunteerList')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Volunteer</Text></Button></Col>
+            <Col><Button onPress={() => goToScreen('JoinAsVolunteer')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Join</Text></Button></Col>
             <Col><Button onPress={() => goToScreen('Donate')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Donate</Text></Button></Col>
             <Col><Button onPress={() => goToScreen('RequestList')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Request</Text></Button></Col>
           </Row>
@@ -147,10 +148,10 @@ function OrganisationProfileScreen(props) {
         <Text style={[Style.heading]}>
           About Us
         </Text>
-        <Text>{orgParam.Description}</Text>
+        {Description?<Text>{Description}</Text>:'-'}
       </View>
 
-      <View style={Style.mv2}>
+      {offices.length>0 ? <View style={Style.mv2}>
         <Text style={[Style.heading, Style.mb2]}>
           Offices
         </Text>
@@ -166,7 +167,7 @@ function OrganisationProfileScreen(props) {
             ))
           }
         </View>
-      </View>
+      </View>: null}
 
     </ScrollView>
   );

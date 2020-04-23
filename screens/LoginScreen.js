@@ -14,6 +14,10 @@ class LoginScreen extends React.Component {
       email: null,
       password: null
     }
+
+    this.props.navigation.setOptions({
+      title: 'Login'
+    });
   }
 
   handleSubmit() {
@@ -88,6 +92,6 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     alignContent: 'center',
-    padding: 25
+    padding: 20
   }
 });
