@@ -12,7 +12,8 @@ export default function HomeScreen(props) {
     <View style={styles.container}>
       <View style={styles.navWrapper}>
         <StyledHomeButton text={'Donate'} image={require('./../assets/icons/donate.png')} goToScreen={() => goToScreen('DonateList')} />
-        <StyledHomeButton text={'Request'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('RequestList')} />
+        <StyledHomeButton text={'Requests'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('Requests')} />
+        {/* <StyledHomeButton text={'Request'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('RequestList')} /> */}
       </View>
       <View style={styles.navWrapper}>
         <StyledHomeButton isFull={true} text={'Register as Volunteer'} image={require('./../assets/icons/volunteer.png')} goToScreen={() => goToScreen('VolunteerList')} />

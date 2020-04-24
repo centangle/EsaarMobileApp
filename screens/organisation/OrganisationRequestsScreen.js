@@ -6,15 +6,17 @@ import Style from '../../constants/Style';
 import Colors from '../../constants/Colors';
 import { fetchOrgRequestsStart } from '../../common/redux/organization/organization.actions';
 import { Global } from '../../constants/Global';
+import { Card, CardItem, Body, Image, Left, Thumbnail } from 'native-base';
 
 const OrganisationRequestsScreen = (props) => {
-  const {fetchOrgRequestsStart, route, requests} = props;
+  const { fetchOrgRequestsStart, route, organization } = props;
+  const { requests, organizations } = organization;
   const { baseUrl } = Global;
   const orgParam = route.params;
-  const {id} = orgParam;
+  const { id } = orgParam;
 
   React.useEffect(() => {
-    fetchOrgRequestsStart('FETCH_ORG_REQUESTS_START',id)
+    fetchOrgRequestsStart('FETCH_ORG_REQUESTS_START', id)
   }, [fetchOrgRequestsStart]);
 
   props.navigation.setOptions({
@@ -24,18 +26,14 @@ const OrganisationRequestsScreen = (props) => {
   const mappedData = requests.map(request => {
     return {
       Name: request.Organization.Name,
-      RequestType:request.Type,
-      Date:request.CreatedDate,
-      AssignedTo:request.Moderator.Name,
-      ReqBy:request.Entity.Name,
-      Status:request.Status,
+      RequestType: request.Type,
+      Date: request.CreatedDate,
+      AssignedTo: request.Moderator.Name,
+      ReqBy: request.Entity.Name,
+      Status: request.Status,
       Description: request.Entity.Name + ' has requested to ' + request.Type + '. The current status is ' + request.Status,
       ImageUrl: organizations[request.Organization.Id] ? organizations[request.Organization.Id].ImageUrl : null,
-      children: [], Id: request.Id,
-      actions: [
-        { id: request.Id + 'assign', item: request, title: 'Self Asign', handleClick: handleAssign, visible: request.IsOpenRequest === true },
-        { id: request.Id + 'view', item: request, title: 'View', handleClick: handleClick, visible: request.CanAccessRequestThread === true }
-      ]
+      children: [], Id: request.Id
     }
   });
 
@@ -45,18 +43,26 @@ const OrganisationRequestsScreen = (props) => {
         <Text style={[Style.heading, Style.mb2]}>
           Requests
         </Text>
-        <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
+        <View>
           {
-            requests ? 
-            mappedData.map((l, i) => (
-              <ListItem
-                key={i}
-                leftAvatar={{ source: { uri: baseUrl+l.ImageUrl } }}
-                title={l.Name}
-                subtitle={l.Description}
-                bottomDivider
-              />
-            )): null
+            requests ?
+              mappedData.map((l, i) => (
+                <Card style={[Style.outerShadow, Style.defaultRadius, Style.mb2]} key={i}>
+                  <CardItem header bordered>
+                    <Left>
+                      <Thumbnail source={{ uri: baseUrl + l.ImageUrl }} />
+                      <Body>
+                        <Text style={Style.bold}>{l.Name}</Text>
+                      </Body>
+                    </Left>
+                  </CardItem>
+                  <CardItem>
+                    <Body>
+                      <Text style={Style.colorGray}>{l.Description}</Text>
+                    </Body>
+                  </CardItem>
+                </Card>
+              )) : null
           }
         </View>
       </View>
@@ -64,16 +70,15 @@ const OrganisationRequestsScreen = (props) => {
   );
 }
 
-const mapState = (state, getState) => {
+const mapState = (state) => {
   const { organization } = state;
-  const { requests } = organization;
   return {
-    requests
+    organization
   }
 }
 
 const mapDispatch = dispatch => ({
-  fetchOrgRequestsStart: (type,id) => dispatch(fetchOrgRequestsStart(type,id)),
+  fetchOrgRequestsStart: (type, id) => dispatch(fetchOrgRequestsStart(type, id)),
   dispatch
 });
 
