@@ -3,54 +3,52 @@ import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ListItem } from 'react-native-elements';
 // import { ScrollView } from 'react-native-gesture-handler';
-import StyleCategoryButton from './../components/StyleCategoryButton';
-import Style from '../constants/Style';
-import Colors from './../constants/Colors';
-import ArrowRight from './../components/ArrowRight';
+import StyleCategoryButton from '../../components/StyleCategoryButton';
+import Style from '../../constants/Style';
+import Colors from '../../constants/Colors';
+import ArrowRight from '../../components/ArrowRight';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import { fetchOrganizationStart } from '../../common/redux/organization/organization.actions';
+import { Global } from '../../constants/Global';
 
 class DonateListScreen extends React.Component {
   constructor(props) {
     super(props);
+    const {baseUrl} = Global;
     this.state = {
+      baseUrl,
       catgeories: [
         {
           name: 'All',
-          icon: require('./../assets/icons/all.png')
+          icon: require('./../../assets/icons/all.png')
         },
         {
           name: 'Food',
-          icon: require('./../assets/icons/food.png')
+          icon: require('./../../assets/icons/food.png')
         },
         {
           name: 'Health',
-          icon: require('./../assets/icons/food.png'),
+          icon: require('./../../assets/icons/food.png'),
         },
         {
           name: 'Education',
-          icon: require('./../assets/icons/food.png')
+          icon: require('./../../assets/icons/food.png')
         },
         {
           name: 'Grocery',
-          icon: require('./../assets/icons/food.png')
-        }
-      ],
-      list: [
-        {
-          name: 'Amy Farha',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          subtitle: 'Vice President'
-        },
-        {
-          name: 'Chris Jackson',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          subtitle: 'Vice Chairman'
+          icon: require('./../../assets/icons/food.png')
         }
       ]
     }
-  }
 
+    this.props.navigation.setOptions({
+      title: 'Donate'
+    });
+
+    this.props.fetchOrganizationStart();
+  }
+  
   selectCategory(cat){
     cat.selected = cat.selected ? false : true;
     this.setState({
@@ -59,10 +57,11 @@ class DonateListScreen extends React.Component {
   }
 
   selectOrganization(org){
-    this.props.navigation.push('Donate');
+    this.props.navigation.push('Donate', {organization: org});
   }
 
   render() {
+    const {organizations} = this.props;
     return (
       <View style={styles.container}>
         <Text style={styles.heading}>Filter by Categories</Text>
@@ -103,12 +102,12 @@ class DonateListScreen extends React.Component {
         </View>
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
           {
-            this.state.list.map((l, i) => (
+            organizations.map((l, i) => (
               <ListItem
                 onPress={() => { this.selectOrganization(l) }}
                 key={i}
-                leftAvatar={{ source: { uri: l.avatar_url } }}
-                title={l.name}
+                leftAvatar={{ source: { uri: this.state.baseUrl+l.ImageUrl } }}
+                title={l.Name}
                 subtitle={l.subtitle}
                 bottomDivider
                 chevron
@@ -121,7 +120,21 @@ class DonateListScreen extends React.Component {
   }
 }
 
-export default connect()(DonateListScreen);
+const mapState = (state) => {
+  const { organization } = state;
+  return {
+    organizations: Object.keys(organization.organizations).map(key => {
+      return { ...organization.organizations[key], title: organization.organizations[key].Name }
+    })
+  }
+}
+
+const mapDispatch = dispatch => ({
+  fetchOrganizationStart: () => dispatch(fetchOrganizationStart()),
+  dispatch
+});
+
+export default connect(mapState, mapDispatch)(DonateListScreen);
 
 
 const styles = StyleSheet.create({

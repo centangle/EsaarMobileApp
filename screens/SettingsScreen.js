@@ -7,9 +7,11 @@ import { signOutStart } from '../common/redux/user/user.actions';
 import { connect } from 'react-redux';
 
 function SettingsScreen({navigation, signOutStart}) {
+  console.log(navigation);
   const signout = () =>{
     signOutStart();
     navigation.pop();
+    //navigation.navigate('LoginRoot');
   }
 
   return (

@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import RequestListScreen from './screens/RequestListScreen';
-import DonateListScreen from './screens/DonateListScreen';
-import DonateScreen from './screens/DonateScreen';
+import DonateListScreen from './screens/donate/DonateListScreen';
+import DonateScreen from './screens/donate/DonateScreen';
 import TaskScreen from './screens/TaskScreen';
 import VolunteerListScreen from './screens/VolunteerListScreen';
 import SplashScreenView from './components/SplashScreenView';
@@ -18,9 +18,6 @@ import SettingsScreen from './screens/SettingsScreen';
 import OrganisationsListScreen from './screens/organisation/OrganisationsListScreen';
 import OrganisationProfileScreen from './screens/organisation/OrganisationProfileScreen';
 import AddOrganisationScreen from './screens/organisation/AddOrganisationScreen';
-import LogoTitle from './components/LogoTitle';
-import { Button } from 'native-base';
-import HeaderRightOption from './components/HeaderRightOption';
 import ItemsListScreen from './screens/organisation/ItemsListScreen';
 import OrganisationCampaignsScreen from './screens/organisation/OrganisationCampaignsScreen';
 import OrganisationVolunteersScreen from './screens/organisation/OrganisationVolunteersScreen';
@@ -43,7 +40,7 @@ function MainApp(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-
+  
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -65,10 +62,11 @@ function MainApp(props) {
       <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
         <Stack.Navigator>
           {
-            props.user === undefined ?
+            props.user==null ?
               <Stack.Screen name="Root" component={LoginScreen} /> :
               <Stack.Screen name="Root" component={BottomTabNavigator} />
           }
+          <Stack.Screen name="LoginRoot" component={LoginScreen} />
           <Stack.Screen name="DonateList" component={DonateListScreen} />
           <Stack.Screen name="Donate" component={DonateScreen} />
           <Stack.Screen name="RequestList" component={RequestListScreen} />

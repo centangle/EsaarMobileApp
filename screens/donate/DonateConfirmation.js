@@ -7,7 +7,7 @@ import {
     TouchableHighlight,
     View
 } from "react-native";
-import Style from "../constants/Style";
+import Style from "../../constants/Style";
 import { Grid, Row, Col } from "native-base";
 
 export default function DonateConfirmation(props) {

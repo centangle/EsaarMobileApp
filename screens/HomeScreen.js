@@ -20,7 +20,7 @@ export default function HomeScreen(props) {
       </View>
       <View style={styles.navWrapper}>
         <StyledHomeButton text={'Organizations'} goToScreen={() => goToScreen('Organizations')} image={require('./../assets/icons/donate.png')}/>
-        <StyledHomeButton text={'Settings'} goToScreen={() => goToScreen('Settings')} />
+        <StyledHomeButton text={'Settings'} goToScreen={() => goToScreen('Settings')} image={require('./../assets/icons/settings-icon.png')}/>
       </View>
     </View>
   );

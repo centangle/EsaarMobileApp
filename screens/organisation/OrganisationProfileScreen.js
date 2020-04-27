@@ -76,8 +76,8 @@ function OrganisationProfileScreen(props) {
     }
   ];
 
-  const goToScreen = (screen) => {
-    props.navigation.push(screen, { id: Id });
+  const goToScreen = (screen, param) => {
+    props.navigation.push(screen, param);
   }
 
   return (
@@ -91,8 +91,8 @@ function OrganisationProfileScreen(props) {
         <Col style={styles.userInfo}>
           <Text style={Style.heading}>{orgParam.Name}</Text>
           <Row style={Style.mv1}>
-            <Col><Button onPress={() => goToScreen('JoinAsVolunteer')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Join</Text></Button></Col>
-            <Col><Button onPress={() => goToScreen('Donate')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Donate</Text></Button></Col>
+            <Col><Button onPress={() => goToScreen('JoinAsVolunteer',{ id: Id })} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Join</Text></Button></Col>
+            <Col><Button onPress={() => goToScreen('Donate', {organization: orgParam})} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Donate</Text></Button></Col>
             <Col><Button onPress={() => goToScreen('RequestList')} block style={[Style.outerShadow, styles.headerActBtn]}><Text style={Style.defaultColor}>Request</Text></Button></Col>
           </Row>
         </Col>
@@ -105,7 +105,7 @@ function OrganisationProfileScreen(props) {
               organisationOpts.map((option, i) => {
                 const { name, icon, route } = option;
                 return (
-                  <TouchableOpacity onPress={() => goToScreen(route)} key={i} style={{ paddingVertical: 12 }}>
+                  <TouchableOpacity onPress={() => goToScreen(route,{ id: Id })} key={i} style={{ paddingVertical: 12 }}>
                     <StyleCategoryButton
                       btnStyle={styles.catContainer}
                       title={name}

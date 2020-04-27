@@ -3,23 +3,33 @@ import { TextInput, View, Text, StyleSheet } from 'react-native';
 import { Form, Picker, Icon } from 'native-base';
 import Colors from '../constants/Colors';
 import Style from '../constants/Style';
+import { connect } from 'react-redux';
 
-export default function QuantityField(props) {
-  const { name } = props;
-  const [text, setText] = React.useState('', '');
-  const [quantity, selectQuantity] = React.useState('');
-  const onQuantityChange = (v) => {
-    selectQuantity(v);
+function QuantityField(props) {
+  const { item } = props;
+  const {Name, quantity} = item;
+  const [itemUnit, selectUnit] = React.useState('');
+  const onUnitChange = (v) => {
+    selectUnit(v);
   }
+
+  const handleChange = (item,quantity) =>{
+    props.dispatch({
+      type:'QUANTITY_CHANGED',
+      payload:{...item,quantity:quantity?parseFloat(quantity):0}})
+ }
+  
   return (
     <View style={[Style.outerShadow, Style.boxLayout, styles.quantityWrapper]}>
-      <Text style={styles.text}>{name}</Text>
+      <Text style={styles.text}>{Name}</Text>
       <View style={styles.inputsWrapper}>
         <TextInput
           style={[Style.outerShadow, Style.boxLayout, styles.quantityInput]}
           placeholder="Quantity"
-          onChangeText={text => setText(text)}
-          defaultValue={text}
+          onChangeText={text => handleChange(item, text)}
+          defaultValue={quantity?quantity.toString():''}
+          keyboardType={'numeric'}
+          maxLength={3}
         />
         <Form>
           <Picker
@@ -28,19 +38,23 @@ export default function QuantityField(props) {
             iosHeader="Select Unit"
             placeholder="Select Unit"
             iosIcon={<Icon name="arrow-down" />}
-            selectedValue={quantity}
-            onValueChange={(value) => onQuantityChange(value)}
+            selectedValue={itemUnit}
+            onValueChange={(value) => onUnitChange(value)}
             style={styles.unitPicker}
           >
-            <Picker.Item label="Kg" value="kg" />
-            <Picker.Item label="Ton" value="ton" />
-            <Picker.Item label="Mili Ton" value="mili-ton" />
+            {
+              item.ItemUOMs.map(uom=>{
+                return <Picker.Item key={uom.Id} label={uom.Name} value={uom.Id} />
+              })
+            }
           </Picker>
         </Form>
       </View>
     </View>
   );
 }
+
+export default connect()(QuantityField);
 
 const styles = StyleSheet.create({
   quantityWrapper: {
