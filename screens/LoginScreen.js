@@ -3,15 +3,17 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { TextInput } from 'react-native';
 import Style from '../constants/Style';
-import { Button, Toast, Row, Col } from 'native-base';
+import { Button, Toast, Row, Col, Spinner, Left } from 'native-base';
 import { connect } from 'react-redux';
 import { emailSignInStart, signUpStart } from '../common/redux/user/user.actions';
 import Colors from '../constants/Colors';
+import { AppLoading } from 'expo';
 
 class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isLoading: false,
       loginMode: true,
       email: null,
       password: null,
@@ -26,10 +28,30 @@ class LoginScreen extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    
+    if (prevProps.user !== this.props.user) {
+      console.log(this.props.user)
+      const {user} = this.props;
+      if(user.error!=null){
+        //console.log('error arrives')
+        this.setState({
+          isLoading: false
+        });
+        Toast.show({
+          text: user.error.error_description || 'Please enter valid info!',
+          duration: 5000
+        })
+      }
+    }
+  }
+
   handleSubmit() {
     const { email, password } = this.state;
     const { emailSignInStart } = this.props;
-
+    this.setState({
+      isLoading: true
+    });
     if (this.validateLoginForm()) {
       emailSignInStart({ username: email, password: password, grant_type: "password" });
     }
@@ -38,7 +60,9 @@ class LoginScreen extends React.Component {
   handleRegisterSubmit() {
     const { name, mobile, _email, _password } = this.state;
     const { signUpStart } = this.props;
-
+    this.setState({
+      isLoading: true
+    });
     if (this.validateRegisterForm()) {
       signUpStart({ Email: _email, Password: _password, ConfirmPassword: _password, MobileNo: mobile, Name: name });
     }
@@ -109,6 +133,7 @@ class LoginScreen extends React.Component {
             <Button style={[styles.headingBtn, this.state.loginMode === 'signup' ? styles.active : '']} block transparent onPress={() => this.formMode('signup')}><Text style={Style.fontSizeNormal}>Signup</Text></Button>
           </Col>
         </Row>
+        
         <View style={styles.formContainer}>
           {this.state.loginMode ? <View>
             <TextInput
@@ -153,8 +178,16 @@ class LoginScreen extends React.Component {
             </View>}
             <Image resizeMode={'contain'} style={styles.logo} source={require('./../assets/icons/logo-blue.png')} />
         </View>
+        {this.state.isLoading?<Spinner style={styles.spinner} color={Colors.themeColorPrimary} />:null}
       </ScrollView>
     );
+  }
+}
+
+const mapState = (state) => {
+  const { user } = state;
+  return {
+    user
   }
 }
 
@@ -163,7 +196,7 @@ const mapDispatchToProps = dispatch => ({
   signUpStart: (emailAndPassword) => dispatch(signUpStart(emailAndPassword)),
 });
 
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export default connect(mapState, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
   formContainer: {
@@ -184,5 +217,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
 width: 150,
 alignSelf: 'center'
+  },
+  spinner:{
+    position: 'absolute',
+    right: 0,
+    left: 0,
+    top: '50%'
   }
 });
