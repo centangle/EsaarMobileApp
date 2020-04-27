@@ -22,8 +22,9 @@ const RequestsScreen = ({ data, dispatch, fetchRequestStart, navigation }) => {
     dispatch({ type: 'ASSIGN_REQUEST_START', payload: { organizationId: item.Organization.Id, requestId: item.Id } });
   }
   const openRequestThread = (obj) => {
+    console.log('object: ', obj)
     dispatch({ type: obj.Type + '_SELECTED', payload: obj });
-    navigation.push('RequestThread')
+    navigation.push('RequestThread', {id: obj.Id})
     //history.push(history.location.pathname + '/' + obj.Id);
   }
 
@@ -33,6 +34,8 @@ const RequestsScreen = ({ data, dispatch, fetchRequestStart, navigation }) => {
       Description: request.Entity.Name + ' has requested to ' + request.Type + '. The current status is ' + request.Status,
       ImageUrl: request.Organization.ImageUrl,
       children: [], Id: request.Id,
+      Type: request.Type,
+      item: request
     }
   }) : [];
 
@@ -49,7 +52,7 @@ const RequestsScreen = ({ data, dispatch, fetchRequestStart, navigation }) => {
             mappedData.length > 0 ?
               mappedData.map((l, i) => (
                 <ListItem
-                  onPress={() => { openRequestThread(l) }}
+                  onPress={() => { openRequestThread(l.item) }}
                   key={i}
                   leftAvatar={{ source: { uri: baseUrl + l.ImageUrl } }}
                   title={l.Name}

@@ -5,13 +5,24 @@ import Colors from '../../constants/Colors';
 import { connect } from 'react-redux';
 import Timeline from 'react-native-timeline-flatlist';
 import { Global } from '../../constants/Global';
-import { fetchRequestThreadStart } from '../../common/redux/request/request.actions';
+import { fetchRequestThreadStart, fetchRequestStatus } from '../../common/redux/request/request.actions';
+import Moment from 'moment';
+import HeaderRightOption from '../../components/HeaderRightOption';
 
-const RequestThreadScreen = ({ data, dispatch, fetchRequestThreadStart, navigation }) => {
+const RequestThreadScreen = ({ replies, request, fetchRequestThreadStart, navigation, route }) => {
 
-  // React.useEffect(() => {
-  //   fetchRequestThreadStart();
-  // }, [fetchRequestThreadStart]);
+  React.useEffect(() => {
+    fetchRequestThreadStart(route.params.id);
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRightOption onClick={'UpdateRegionRequest'} icon={'create'} color={'#666'} label={''} navigation={navigation} navParams={{id:request.Organization.Id, requestId: route.params.id}}/>
+      ),
+    });
+  }, [fetchRequestThreadStart]);
+
+  React.useEffect(()=>{
+    fetchRequestStatus();
+  },[fetchRequestStatus])
 
   navigation.setOptions({
     title: 'Request Timeline'
@@ -19,38 +30,52 @@ const RequestThreadScreen = ({ data, dispatch, fetchRequestThreadStart, navigati
 
   const { baseUrl } = Global;
 
-  const timelineData = [
-    { time: '09:00', title: 'Event 1', description: 'Event 1 Description' },
-    { time: '10:45', title: 'Event 2', description: 'Event 2 Description' },
-    { time: '12:00', title: 'Event 3', description: 'Event 3 Description' },
-    { time: '14:00', title: 'Event 4', description: 'Event 4 Description' },
-    { time: '16:30', title: 'Event 5', description: 'Event 5 Description' }
-  ]
+  const timelineData = replies ? replies.map(reply => {
+    return {
+      time: Moment(reply.CreatedDate, "YYYY-MM-DD").fromNow(),
+      title: reply.Creator.Name,
+      description: reply.Type,
+      // icon: reply.Organization.ImageUrl
+    }
+  }) : [];
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Timeline
+        {replies ? <Timeline
           data={timelineData}
-        />
+          circleSize={20}
+          circleColor='rgb(45,156,219)'
+          lineColor='rgb(45,156,219)'
+          timeContainerStyle={{minWidth:52, marginTop: -5}}
+          timeStyle={{textAlign: 'center', backgroundColor:'#ff9797', color:'white', padding:5, borderRadius:13}}
+          descriptionStyle={{color:'gray'}}
+          options={{
+            style:{paddingTop:5}
+          }}
+        />: null}
+        {/* {replies ? <Timeline
+          data={timelineData}
+        />: null} */}
       </View>
     </ScrollView>
   );
 
 }
 
-const mapState = (state) => {
-  const { request, organization } = state;
+const mapState = (state, getState) => {
+  const { request, region, organization } = state;
+  const {route} = getState;
   return {
-    data: Object.keys(request.requests).map(key => {
-      return { ...request.requests[key], title: request.requests[key].Organization.Name }
-    }),
-    organizations: organization.organizations
+    replies: request.replies[route.params.id],
+    request: request.requests[route.params.id],
+    regions: region.regions
   }
 }
 
 const mapDispatch = dispatch => ({
   fetchRequestThreadStart: (Id) => dispatch(fetchRequestThreadStart(Id)),
+  fetchRequestStatus:()=>dispatch(fetchRequestStatus()),
   dispatch
 });
 

@@ -33,6 +33,7 @@ import OrganisationRegionsScreen from './screens/organisation/OrganisationRegion
 import OrganisationJoinVolunteerScreen from './screens/organisation/OrganisationJoinVolunteerScreen';
 import RequestsScreen from './screens/request/RequestsScreen';
 import RequestThreadScreen from './screens/request/RequestThreadScreen';
+import UpdateRequestRegionScreen from './screens/request/UpdateRequestRegionScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -89,6 +90,7 @@ function MainApp(props) {
           <Stack.Screen name="JoinAsVolunteer" component={OrganisationJoinVolunteerScreen} />
           <Stack.Screen name="Requests" component={RequestsScreen} />
           <Stack.Screen name="RequestThread" component={RequestThreadScreen} />
+          <Stack.Screen name="UpdateRegionRequest" component={UpdateRequestRegionScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
   <Drawer.Screen name="Root" component={BottomTabNavigator} />
