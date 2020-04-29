@@ -93,12 +93,12 @@ class DonateListScreen extends React.Component {
         <Text style={[styles.heading, Style.mv3]}>
           Select Organization
           </Text>
-          <Ionicons
+          {/* <Ionicons
             onPress={()=>{console.log('search')}}
             name={'ios-search'}
             size={28}
             style={{position: 'absolute', right: 0, top: 12}}
-          />
+          /> */}
         </View>
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
           {

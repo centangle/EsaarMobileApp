@@ -36,12 +36,12 @@ const OrganisationsListScreen = ({ data, fetchOrganizationStart, navigation }) =
         <Text style={[styles.heading, Style.mv3]}>
           Organizations
           </Text>
-        <Ionicons
+        {/* <Ionicons
           onPress={() => { setSearch(!showSearch) }}
           name={'ios-search'}
           size={28}
           style={{ position: 'absolute', right: 0, top: 12 }}
-        />
+        /> */}
       </View>
       {
         showSearch ?

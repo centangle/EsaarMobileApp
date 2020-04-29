@@ -5,76 +5,83 @@ import Style from '../constants/Style';
 import Colors from './../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
+import { connect } from 'react-redux';
+import { fetchOrganizationStart } from '../common/redux/organization/organization.actions';
+import { Global } from '../constants/Global';
 
-export default class VolunteerListScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showSearch: false,
-      searchText: null,
-      list: [
-        {
-          name: 'Amy Farha',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-          subtitle: 'Vice President'
-        },
-        {
-          name: 'Chris Jackson',
-          avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-          subtitle: 'Vice Chairman'
-        }
-      ]
-    }
+const VolunteerListScreen = ({ navigation, data, fetchOrganizationStart }) => {
+
+  const [searchText, setSearchText] = React.useState('');
+  const [showSearch, setSearch] = React.useState(false);
+  const { baseUrl } = Global;
+
+  const selectOrganization = (org) => {
+    navigation.push('JoinAsVolunteer',{ id: org.Id });
   }
 
-  selectOrganization(org) {
-    this.props.navigation.push('Donate');
-  }
+  navigation.setOptions({
+    title: 'Join Organisation'
+  });
 
-  render() {
-    const { showSearch } = this.state;
-    return (
-      <ScrollView style={[Style.pageContainer]}>
-        <View>
-          <Text style={[styles.heading, Style.mv3]}>
-            Select Organization
+  React.useEffect(() => {
+    fetchOrganizationStart();
+  }, [fetchOrganizationStart]);
+
+  return (
+    <ScrollView style={[Style.pageContainer]}>
+      <View>
+        <Text style={[styles.heading, Style.mv3]}>
+          Select Organization
           </Text>
-          <Ionicons
-            onPress={() => { this.setState({ showSearch: !this.state.showSearch }) }}
-            name={'ios-search'}
-            size={28}
-            style={{ position: 'absolute', right: 0, top: 12 }}
-          />
-        </View>
+        {/* <Ionicons
+          onPress={() => { setSearch(!showSearch) }}
+          name={'ios-search'}
+          size={28}
+          style={{ position: 'absolute', right: 0, top: 12 }}
+        /> */}
+      </View>
+      {
+        showSearch ?
+          <TextInput
+            style={[Style.outerShadow, Style.boxLayout, styles.quantityInput, Style.mb2]}
+            placeholder="Search"
+            onChangeText={text => setSearchText(text)}
+            defaultValue={searchText}
+          /> : null
+      }
+      <View style={[Style.outerShadow, Style.defaultRadius, Style.p1, styles.categoriesContainer]}>
         {
-          showSearch ?
-            <TextInput
-              style={[Style.outerShadow, Style.boxLayout, styles.quantityInput, Style.mb2]}
-              placeholder="Search"
-              onChangeText={text => setText(text)}
-              defaultValue={this.state.searchText}
-            /> : null
+          data.map((l, i) => (
+            <ListItem
+              onPress={() => selectOrganization(l)}
+              key={i}
+              leftAvatar={{ source: { uri: baseUrl + l.ImageUrl } }}
+              title={l.Name}
+              bottomDivider
+              chevron
+            />
+          ))
         }
-        <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
-          {
-            this.state.list.map((l, i) => (
-              <ListItem
-                onPress={() => { this.selectOrganization(l) }}
-                key={i}
-                leftAvatar={{ source: { uri: l.avatar_url } }}
-                title={l.name}
-                subtitle={l.subtitle}
-                bottomDivider
-                chevron
-              />
-            ))
-          }
-        </View>
-      </ScrollView>
-    );
+      </View>
+    </ScrollView>
+  );
+}
+
+const mapState = (state) => {
+  const { organization } = state;
+  return {
+    data: Object.keys(organization.organizations).map(key => {
+      return { ...organization.organizations[key], title: organization.organizations[key].Name }
+    })
   }
 }
 
+const mapDispatch = dispatch => ({
+  fetchOrganizationStart: () => dispatch(fetchOrganizationStart()),
+  dispatch
+});
+
+export default connect(mapState, mapDispatch)(VolunteerListScreen);
 
 const styles = StyleSheet.create({
   heading: {
