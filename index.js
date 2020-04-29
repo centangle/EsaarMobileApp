@@ -10,7 +10,7 @@ import useLinking from './navigation/useLinking';
 import RequestListScreen from './screens/RequestListScreen';
 import DonateListScreen from './screens/donate/DonateListScreen';
 import DonateScreen from './screens/donate/DonateScreen';
-import TaskScreen from './screens/TaskScreen';
+import TaskScreen from './screens/task/TaskScreen';
 import VolunteerListScreen from './screens/VolunteerListScreen';
 import SplashScreenView from './components/SplashScreenView';
 import LoginScreen from './screens/LoginScreen';

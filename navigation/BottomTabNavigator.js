@@ -5,7 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import SearchScreen from '../screens/SearchScreen';
-import TasksScreen from '../screens/TasksScreen';
+import TasksScreen from '../screens/task/TasksScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import { Platform } from 'react-native';
 import Colors from '../constants/Colors';

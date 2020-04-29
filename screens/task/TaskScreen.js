@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import Style from '../constants/Style';
+import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import Style from '../../constants/Style';
 import { Button, Grid, Col, Row, Icon } from 'native-base';
 
 export default function TaskScreen() {
-
-  const organizations = [1, 2];
-  const onGoingTasks = [1, 2, 3, 4, 5]
-
   const sellAll = () => {
     console.log('see all')
   }

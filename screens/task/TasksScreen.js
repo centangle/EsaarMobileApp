@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import Style from '../constants/Style';
+import Style from '../../constants/Style';
 import { Button, Grid, Col } from 'native-base';
 
 export default function TasksScreen(props) {
@@ -28,7 +28,7 @@ export default function TasksScreen(props) {
             organizations.map((org, i) => {
               return (
                 <Button style={[Style.outerShadow, Style.boxLayout, styles.btnWrapper]} key={i}>
-                  <Image style={styles.image} source={require('./../assets/images/saylani.png')} />
+                  <Image style={styles.image} source={require('./../../assets/images/saylani.png')} />
                   <Text style={[Style.alignCenter, Style.bold, Style.mb1]}>Saylani Razakar Foundation</Text>
                   <Text style={[Style.alignCenter]}>Open Task 2</Text>
                 </Button>
