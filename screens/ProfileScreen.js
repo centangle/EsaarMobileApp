@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import Style from '../constants/Style';
 import { Button, Grid, Col, Icon } from 'native-base';
+import HeaderRightOption from '../components/HeaderRightOption';
 
 export default function ProfileScreen(props) {
-
+  console.log(props)
   const organizations = [1, 2];
   const onGoingTasks = [1, 2, 3, 4, 5]
 
@@ -13,8 +14,8 @@ export default function ProfileScreen(props) {
     console.log('see all')
   }
 
-  const goToTask = (task = null) => {
-    props.navigation.push('Task');
+  const goToTask = (page,task = null) => {
+    props.navigation.push(page, task);
   }
 
   return (
@@ -26,6 +27,7 @@ export default function ProfileScreen(props) {
           </View>
         </Col>
         <Col style={styles.userInfo}>
+          <Button onPress={()=>goToTask('Settings')} transparent><Text><Icon name={'settings'}/></Text></Button>
           <Text style={Style.heading}>Hadi Mustafa</Text>
           <Text style={styles.address}><Icon name="pin" style={styles.pin}/> DHA Phase II, Islamabad</Text>
         </Col>
@@ -64,7 +66,7 @@ export default function ProfileScreen(props) {
             {
               onGoingTasks.map((org, i) => {
                 return (
-                  <Button onPress={() => goToTask(org)} style={[Style.outerShadow, Style.boxLayout, styles.btnWrapper]} key={i}>
+                  <Button onPress={() => goToTask('Task',org)} style={[Style.outerShadow, Style.boxLayout, styles.btnWrapper]} key={i}>
                     <Text>Food</Text>
                     <Text style={[Style.alignCenter, styles.categories]}>Flour, Meal</Text>
                     <Text style={[Style.alignCenter, Style.mb1]}>Saylani Razakar Foundation</Text>

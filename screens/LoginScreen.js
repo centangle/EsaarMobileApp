@@ -7,7 +7,6 @@ import { Button, Toast, Row, Col, Spinner, Left } from 'native-base';
 import { connect } from 'react-redux';
 import { emailSignInStart, signUpStart } from '../common/redux/user/user.actions';
 import Colors from '../constants/Colors';
-import { AppLoading } from 'expo';
 
 class LoginScreen extends React.Component {
   constructor(props) {
@@ -147,6 +146,7 @@ class LoginScreen extends React.Component {
               placeholder="Password"
               onChangeText={password => this.setState({ password })}
               defaultValue={this.state.password}
+              secureTextEntry={true}
             />
             <Button onPress={() => this.handleSubmit()} block style={[Style.boxLayout, Style.mv3]}><Text style={Style.textWhite}>Login</Text></Button>
           </View> : <View>
@@ -173,6 +173,7 @@ class LoginScreen extends React.Component {
                 placeholder="Password"
                 onChangeText={_password => this.setState({ _password })}
                 defaultValue={this.state._password}
+                secureTextEntry={true}
               />
               <Button onPress={() => this.handleRegisterSubmit()} block style={[Style.boxLayout, Style.mv3]}><Text style={Style.textWhite}>Register</Text></Button>
             </View>}

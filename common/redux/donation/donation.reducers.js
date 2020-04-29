@@ -3,11 +3,48 @@ import { addItemToCart } from './donation.actions';
 const INITIAL_STATE = {
     sider: false,
     cartItems: {},
-    donations: []
+    donations: {},
+    replies:{},
+    status:{}
 };
 
 const donation = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+            case 'FETCH_DONATION_REQUEST_THREAD_SUCCESS':
+      return {
+        ...state,
+        replies: {
+          ...state.replies,
+          [action.payload.Id]: action.payload.result
+        }
+      }
+    case 'FETCH_REQUEST_STATUS_SUCCESS':
+      return {
+        ...state,
+        status: action.payload.result.reduce((obj, item) => {
+          obj[item] = item
+          return obj
+        }, {})
+      }
+    case 'FETCH_DONATION_DETAILS_SUCCESS':
+      return{
+        ...state,
+        donations:{
+          ...state.donations,
+          [action.payload.DonationRequestOrganization.Id]:{
+            ...state.donations[action.payload.DonationRequestOrganization.Id],
+            ...action.payload
+          }
+        }
+      }
+    case 'FETCH_DONATION_REQUEST_SUCCESS':
+      return {
+        ...state,
+        donations: action.payload.result.reduce((obj, item) => {
+          obj[item.DonationRequestOrganization.Id] = item
+          return obj
+        }, {})
+      }
         case donationTypes.QUANTITY_CHANGED:
             return{
                 ...state,
@@ -27,6 +64,15 @@ const donation = (state = INITIAL_STATE, action) => {
                     } : { ...action.payload, quantity: 1 }
                 },
             }
+        case donationTypes.REMOVE_DONATION_ITEM:
+          const filtered = state.cartItems;
+          delete filtered[action.payload.Id];
+          return{
+            ...state,
+            cartItems:{
+              ...filtered
+            }
+          }
         case donationTypes.FETCH_ORG_DETAIL_SUCCESS:
             return {
                 ...state,

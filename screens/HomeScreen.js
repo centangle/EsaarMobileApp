@@ -12,7 +12,7 @@ export default function HomeScreen(props) {
     <View style={styles.container}>
       <View style={styles.navWrapper}>
         <StyledHomeButton text={'Donate'} image={require('./../assets/icons/donate.png')} goToScreen={() => goToScreen('DonateList')} />
-        <StyledHomeButton text={'Requests'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('Requests')} />
+        <StyledHomeButton text={'Donations'} image={require('./../assets/icons/donations.png')} goToScreen={() => goToScreen('DonationRequests')} />
         {/* <StyledHomeButton text={'Request'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('RequestList')} /> */}
       </View>
       <View style={styles.navWrapper}>
@@ -20,7 +20,7 @@ export default function HomeScreen(props) {
       </View>
       <View style={styles.navWrapper}>
         <StyledHomeButton text={'Organizations'} goToScreen={() => goToScreen('Organizations')} image={require('./../assets/icons/donate.png')}/>
-        <StyledHomeButton text={'Settings'} goToScreen={() => goToScreen('Settings')} image={require('./../assets/icons/settings-icon.png')}/>
+        <StyledHomeButton text={'Requests'} image={require('./../assets/icons/request.png')} goToScreen={() => goToScreen('Requests')} />
       </View>
     </View>
   );

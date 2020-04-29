@@ -7,7 +7,7 @@ export default function HeaderRightOption(props) {
   //console.log('props', navigation);
   return (
     <View>
-      <Button transparent onPress={()=>navigation.push(onClick, navParams)}>
+      <Button iconLeft transparent onPress={()=>navigation.push(onClick, navParams)}>
         { icon ?<Icon name={icon} />:null }
         { label?<Text>{label}</Text>:null }
       </Button>

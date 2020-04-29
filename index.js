@@ -31,6 +31,8 @@ import OrganisationJoinVolunteerScreen from './screens/organisation/Organisation
 import RequestsScreen from './screens/request/RequestsScreen';
 import RequestThreadScreen from './screens/request/RequestThreadScreen';
 import UpdateRequestRegionScreen from './screens/request/UpdateRequestRegionScreen';
+import DonationRequestsScreen from './screens/donate/DonationRequestsScreen';
+import DonationRequestThreadScreen from './screens/donate/DonationRequestThreadScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -87,7 +89,9 @@ function MainApp(props) {
           <Stack.Screen name="RegionsList" component={OrganisationRegionsScreen} />
           <Stack.Screen name="JoinAsVolunteer" component={OrganisationJoinVolunteerScreen} />
           <Stack.Screen name="Requests" component={RequestsScreen} />
+          <Stack.Screen name="DonationRequests" component={DonationRequestsScreen} />
           <Stack.Screen name="RequestThread" component={RequestThreadScreen} />
+          <Stack.Screen name="DonationRequestThread" component={DonationRequestThreadScreen} />
           <Stack.Screen name="UpdateRegionRequest" component={UpdateRequestRegionScreen} />
         </Stack.Navigator>
         {/* <Drawer.Navigator initialRouteName="Home">
