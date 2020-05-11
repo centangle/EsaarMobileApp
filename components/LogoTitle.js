@@ -6,7 +6,7 @@ export default function LogoTitle(props) {
         <Image
           resizeMode={'contain'}
           source={require('./../assets/icons/logo-orange.png')}
-          style={{ height: 30}}
+          style={{ height: 40}}
         />
   );
 }

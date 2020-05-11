@@ -83,6 +83,7 @@ class LoginScreen extends React.Component {
       Toast.show({
         text: 'Please enter valid email'
       });
+      this.showLoader(false);
       return false;
     }
 
@@ -90,6 +91,7 @@ class LoginScreen extends React.Component {
       Toast.show({
         text: 'Please enter password'
       });
+      this.showLoader(false);
       return false;
     } else {
       return true;
@@ -102,6 +104,7 @@ class LoginScreen extends React.Component {
       Toast.show({
         text: 'Please enter valid email'
       });
+      this.showLoader(false);
       return false;
     }
 
@@ -109,6 +112,7 @@ class LoginScreen extends React.Component {
       Toast.show({
         text: 'Please enter password'
       });
+      this.showLoader(false);
       return false;
     } else {
       return true;
@@ -119,6 +123,12 @@ class LoginScreen extends React.Component {
     this.setState({
       loginMode: mode == 'login' ? true : false
     })
+  }
+
+  showLoader(mode){
+    this.setState({
+      isLoading: mode
+    });
   }
 
   render() {
@@ -177,7 +187,7 @@ class LoginScreen extends React.Component {
               />
               <Button onPress={() => this.handleRegisterSubmit()} block style={[Style.boxLayout, Style.mv3]}><Text style={Style.textWhite}>Register</Text></Button>
             </View>}
-            <Image resizeMode={'contain'} style={styles.logo} source={require('./../assets/icons/logo-blue.png')} />
+            <Image resizeMode={'contain'} style={styles.logo} source={require('./../assets/icon.png')} />
         </View>
         {this.state.isLoading?<Spinner style={styles.spinner} color={Colors.themeColorPrimary} />:null}
       </ScrollView>
@@ -203,16 +213,17 @@ const styles = StyleSheet.create({
   formContainer: {
     justifyContent: 'center',
     alignContent: 'center',
-    padding: 20
+    paddingTop: 100,
+    paddingHorizontal: 30
   },
   headingBtn: {
-    borderBottomColor: Colors.tintColor,
+    borderBottomColor: '#ccc',
     borderBottomWidth: 1,
     borderRadius: 0,
     marginHorizontal: 5
   },
   active: {
-    borderBottomColor: Colors.themeColor,
+    // borderBottomColor: Colors.themeColor,
   },
   logo:{
     marginTop: 15,
