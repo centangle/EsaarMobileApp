@@ -1,15 +1,14 @@
-import * as React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import Style from '../../constants/Style';
-import Colors from '../../constants/Colors';
-import { connect } from 'react-redux';
-import { Global } from '../../constants/Global';
-import { Messages } from '../../constants/Messages';
-import { fetchRequestStart } from '../../common/redux/request/request.actions';
+import * as React from "react";
+import {StyleSheet, ScrollView, View, Text} from "react-native";
+import {ListItem} from "react-native-elements";
+import Style from "../../constants/Style";
+import Colors from "../../constants/Colors";
+import {connect} from "react-redux";
+import {Global} from "../../constants/Global";
+import {Messages} from "../../constants/Messages";
+import {fetchRequestStart} from "../../common/redux/request/request.actions";
 
-const RequestsScreen = ({ data, dispatch, fetchRequestStart, navigation }) => {
-
+const RequestsScreen = ({data, dispatch, fetchRequestStart, navigation}) => {
   React.useEffect(() => {
     fetchRequestStart();
   }, [fetchRequestStart]);
@@ -17,75 +16,87 @@ const RequestsScreen = ({ data, dispatch, fetchRequestStart, navigation }) => {
   //   fetchRequestStatus();
   // },[fetchRequestStatus])
 
-  const { baseUrl } = Global;
+  const {baseUrl} = Global;
   const handleAssign = (item) => {
-    dispatch({ type: 'ASSIGN_REQUEST_START', payload: { organizationId: item.Organization.Id, requestId: item.Id } });
-  }
+    dispatch({
+      type: "ASSIGN_REQUEST_START",
+      payload: {organizationId: item.Organization.Id, requestId: item.Id},
+    });
+  };
   const openRequestThread = (obj) => {
-    console.log('object: ', obj)
-    dispatch({ type: obj.Type + '_SELECTED', payload: obj });
-    navigation.push('RequestThread', {id: obj.Id})
+    console.log("object: ", obj);
+    dispatch({type: obj.Type + "_SELECTED", payload: obj});
+    navigation.push("RequestThread", {id: obj.Id});
     //history.push(history.location.pathname + '/' + obj.Id);
-  }
+  };
 
-  const mappedData = data ? data.map(request => {
-    return {
-      Name: request.Organization.Name,
-      Description: request.Entity.Name + ' has requested to ' + request.Type + '. The current status is ' + request.Status,
-      ImageUrl: request.Organization.ImageUrl,
-      children: [], Id: request.Id,
-      Type: request.Type,
-      item: request
-    }
-  }) : [];
+  const mappedData = data
+    ? data.map((request) => {
+        return {
+          Name: request.Organization.Name,
+          Description:
+            request.Entity.Name +
+            " has requested to " +
+            request.Type +
+            ". The current status is " +
+            request.Status,
+          ImageUrl: request.Organization.ImageUrl,
+          children: [],
+          Id: request.Id,
+          Type: request.Type,
+          item: request,
+        };
+      })
+    : [];
 
   return (
     <ScrollView>
       <View style={styles.container}>
         <View>
-          <Text style={[styles.heading, Style.mv3]}>
-            Organization
-          </Text>
+          <Text style={[styles.heading, Style.mv3]}>Organization</Text>
         </View>
         <View style={[Style.outerShadow, Style.defaultRadius, Style.p1]}>
-          {
-            mappedData.length > 0 ?
-              mappedData.map((l, i) => (
-                <ListItem
-                  onPress={() => { openRequestThread(l.item) }}
-                  key={i}
-                  leftAvatar={{ source: { uri: baseUrl + l.ImageUrl } }}
-                  title={l.Name}
-                  titleStyle={styles.titleStyle}
-                  subtitle={l.Description}
-                  bottomDivider
-                  chevron
-                />
-              )) : <Text style={[Style.p2, Style.colorGray]}>
-                {Messages.No_data}
-              </Text>
-          }
+          {mappedData.length > 0 ? (
+            mappedData.map((l, i) => (
+              <ListItem
+                onPress={() => {
+                  openRequestThread(l.item);
+                }}
+                key={i}
+                leftAvatar={{source: {uri: baseUrl + l.ImageUrl}}}
+                title={l.Name}
+                titleStyle={styles.titleStyle}
+                subtitle={l.Description}
+                bottomDivider
+                chevron
+              />
+            ))
+          ) : (
+            <Text style={[Style.p2, Style.colorGray]}>{Messages.No_data}</Text>
+          )}
         </View>
       </View>
     </ScrollView>
   );
-
-}
+};
 
 const mapState = (state) => {
-  const { request, organization } = state;
+  const {request, organization} = state;
   return {
-    data: Object.keys(request.requests).map(key => {
-      return { ...request.requests[key], title: request.requests[key].Organization.Name }
+    data: Object.keys(request.requests).map((key) => {
+      return {
+        ...request.requests[key],
+        title: request.requests[key].Organization.Name,
+      };
     }),
-    organizations: organization.organizations
-  }
-}
+    organizations: organization.organizations,
+  };
+};
 
-const mapDispatch = dispatch => ({
+const mapDispatch = (dispatch) => ({
   fetchRequestStart: () => dispatch(fetchRequestStart()),
   //fetchRequestStatus:()=>dispatch(fetchRequestStatus()),
-  dispatch
+  dispatch,
 });
 
 export default connect(mapState, mapDispatch)(RequestsScreen);
@@ -94,15 +105,16 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    paddingBottom: 25,
     backgroundColor: Colors.defaultBackground,
   },
   heading: {
     color: Colors.headingColor,
     fontSize: 20,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   sendToAllBtn: {
-    fontSize: 18
+    fontSize: 18,
   },
   categoriesContainer: {
     paddingVertical: 5,
@@ -111,8 +123,8 @@ const styles = StyleSheet.create({
   catContainer: {
     marginRight: 15,
   },
-  titleStyle:{
-    fontWeight: 'bold',
-    marginBottom: 5
-  }
+  titleStyle: {
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
 });

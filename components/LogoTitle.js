@@ -1,12 +1,15 @@
-import * as React from 'react';
-import { Image, View } from 'react-native';
+import * as React from "react";
+import {Image} from "react-native";
 
-export default function LogoTitle(props) {
+export default function LogoTitle() {
   return (
-        <Image
-          resizeMode={'contain'}
-          source={require('./../assets/icons/logo-orange.png')}
-          style={{ height: 40}}
-        />
+    <Image
+      resizeMode="contain"
+      source={require("./../assets/icons/logo-orange.png")}
+      style={{
+        height: 40,
+        resizeMode: "contain",
+      }}
+    />
   );
 }
