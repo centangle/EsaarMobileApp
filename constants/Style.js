@@ -17,10 +17,11 @@ export default {
         shadowRadius: 5,
       },
       android: {
-        shadowOffset: {width: 1, height: 3},
-        shadowOpacity: 0.2,
+        shadowOffset: {width: 0.5, height: 0.5},
+        shadowOpacity: 0.1,
         shadowRadius: 1,
-        elevation: 10,
+        elevation: 5,
+        margin: 5,
       },
     }),
   },
@@ -131,7 +132,7 @@ export default {
     paddingHorizontal: 15,
     paddingVertical: 15,
     backgroundColor: Colors.defaultBackground,
-    marginBottom: 25,
+    marginBottom: 0,
   },
   alignCenter: {
     textAlign: "center",
