@@ -92,7 +92,7 @@ function getHeaderTitle(route) {
 
   switch (routeName) {
     case "Home":
-      return <LogoTitle />;
+      return Platform.OS === "ios" ? <LogoTitle /> : "Esaar"; //<LogoTitle />;
     case "Tasks":
       return <TabHeader title={routeName} />;
     case "Profile":
