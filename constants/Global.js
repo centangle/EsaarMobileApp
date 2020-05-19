@@ -1,3 +1,3 @@
 export const Global = {
-    baseUrl: 'http://charity.hostober.pk'
+  baseUrl: "https://api.esaar.app",
 };
