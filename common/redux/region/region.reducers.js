@@ -39,6 +39,7 @@ const region = (state = INITIAL_STATE, action) => {
           return obj
         }, {})
       }
+    case 'LOAD_CAMPAIGN_REGIONS':
     case 'LOAD_ORG_REGIONS':
       return {
         ...state,
@@ -47,6 +48,7 @@ const region = (state = INITIAL_STATE, action) => {
           return obj
         }, {})
       }
+    case 'UNLOAD_CAMPAIGN_REGIONS':
     case 'ADD_ORG_REGION_SUCCESS':
     case 'UNLOAD_ORG_REGIONS':
       return{

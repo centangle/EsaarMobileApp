@@ -11,6 +11,9 @@ import request from './request/request.reducers';
 import upload from './upload/upload.reducer';
 import donation from './donation/donation.reducers';
 import region from './region/region.reducers';
+import uom from './uom/uom.reducers';
+import event from './event/event.reducers';
+import campaign from './campaign/campaign.reducers';
 import { AsyncStorage } from "react-native";
 const persistConfig = {
   key: 'root',
@@ -27,6 +30,9 @@ const rootReducer = combineReducers({
   request,
   upload,
   donation,
-  region
+  region,
+  uom,
+  event,
+  campaign
 });
 export default persistReducer(persistConfig, rootReducer);

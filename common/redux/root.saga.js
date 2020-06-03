@@ -9,6 +9,9 @@ import {requestSagas} from './request/request.sagas';
 import {uploadSagas} from './upload/upload.sagas';
 import {donationSagas} from './donation/donation.sagas';
 import {regionSagas} from './region/region.sagas';
+import {uomSagas} from './uom/uom.sagas';
+import {eventSagas} from './event/event.sagas';
+import {campaignSagas} from './campaign/campaign.sagas';
 export default function* rootSaga() {
     yield all([
         call(settingSagas),call(userSagas),
@@ -18,6 +21,9 @@ export default function* rootSaga() {
         call(requestSagas),
         call(uploadSagas),
         call(donationSagas),
-        call(regionSagas)
+        call(regionSagas),
+        call(uomSagas),
+        call(eventSagas),
+        call(campaignSagas)
     ]);
 }

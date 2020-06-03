@@ -14,39 +14,47 @@ import { apiLink } from '../api.links';
 const url = apiLink;
 export function* fetchRegionAsync() {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/GetAllRegions?dataStructure=Tree", {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/GetAllRegions?dataStructure=Tree", {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchRegionSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchRegionSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchRegionLevelAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const urlPart = action.payload.isOrganizationRegion?"/api/OrganizationRegion/Levels?organizationId="+action.payload.organizationId:"/api/Region/Levels";
-  const response = yield fetch(url + urlPart, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  const urlPart = action.payload.isOrganizationRegion ? "/api/OrganizationRegion/Levels?organizationId=" + action.payload.organizationId : "/api/Region/Levels";
+  try {
+    const response = yield fetch(url + urlPart, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchRegionLevelSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchRegionLevelSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchCountriesAsync(action) {
@@ -54,21 +62,25 @@ export function* fetchCountriesAsync(action) {
   if (action.payload.isOrganizationRegion) {
     q += "&organizationId=" + action.payload.organizationId;
   }
-  const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/Countries?" + q, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const currentUser = yield select(selectCurrentUser);
+    const response = yield fetch(url + "/api/Region/Countries?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchCountriesSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchCountriesSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchStatesAsync(action) {
@@ -80,20 +92,24 @@ export function* fetchStatesAsync(action) {
     q += "&organizationId=" + action.payload.organizationId;
   }
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/States?" + q, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/States?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchStatesSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchStatesSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchDistrictsAsync(action) {
@@ -105,20 +121,24 @@ export function* fetchDistrictsAsync(action) {
     q += "&organizationId=" + action.payload.organizationId;
   }
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/Districts?" + q, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/Districts?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchDistrictsSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchDistrictsSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchTehsilsAsync(action) {
@@ -130,20 +150,24 @@ export function* fetchTehsilsAsync(action) {
     q += "&organizationId=" + action.payload.organizationId;
   }
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/Tehsils?" + q, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/Tehsils?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchTehsilsSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchTehsilsSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchUcsAsync(action) {
@@ -155,38 +179,46 @@ export function* fetchUcsAsync(action) {
     q += "&organizationId=" + action.payload.organizationId;
   }
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/UnionCouncils?" + q, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/UnionCouncils?" + q, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result: result.Items };
+    });
+    if (response.ok) {
+      yield put(fetchUcsSuccess(response));
     }
-    return { ok: true, result: result.Items };
-  });
-  if (response.ok) {
-    yield put(fetchUcsSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* fetchRegionDetailAsync(action) {
   const currentUser = yield select(selectCurrentUser);
-  const response = yield fetch(url + "/api/Region/Get" + action.payload.id, {
-    method: "GET",
-    withCredentials: true,
-    credentials: 'include',
-    headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
-  }).then(async (response) => {
-    const result = await response.json();
-    if (response.status >= 205) {
-      return { result, error: true };
+  try {
+    const response = yield fetch(url + "/api/Region/Get" + action.payload.id, {
+      method: "GET",
+      //withCredentials: true,
+      credentials: 'include',
+      headers: { "Content-Type": "application/json", 'Authorization': 'bearer ' + currentUser.access_token },
+    }).then(async (response) => {
+      const result = await response.json();
+      if (response.status >= 205) {
+        return { result, error: true };
+      }
+      return { ok: true, result };
+    });
+    if (response.ok) {
+      yield put(fetchRegionDetailSuccess(response));
     }
-    return { ok: true, result };
-  });
-  if (response.ok) {
-    yield put(fetchRegionDetailSuccess(response));
+  } catch (error) {
+    alert(error);
   }
 }
 export function* addRegionAsync(action) {
@@ -194,7 +226,7 @@ export function* addRegionAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const region = yield fetch(url + "/api/Region/Create", {
       method: 'POST',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
@@ -221,7 +253,7 @@ export function* updateRegionAsync(action) {
     const currentUser = yield select(selectCurrentUser);
     const region = yield fetch(url + "/api/Region/UpdateMultipleRegionsWithChildrens", {
       method: 'PUT',
-      withCredentials: true,
+      //withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'bearer ' + currentUser.access_token
@@ -261,16 +293,16 @@ export function* fetchRegionLevel() {
 export function* fetchCountries() {
   yield takeLatest(regionTypes.FETCH_COUNTRIES_START, fetchCountriesAsync);
 }
-export function* fetchStates(){
+export function* fetchStates() {
   yield takeLatest(regionTypes.FETCH_STATES_START, fetchStatesAsync);
 }
-export function* fetchDistricts(){
+export function* fetchDistricts() {
   yield takeLatest(regionTypes.FETCH_DISTRICTS_START, fetchDistrictsAsync);
 }
-export function* fetchTehsils(){
+export function* fetchTehsils() {
   yield takeLatest(regionTypes.FETCH_TEHSILS_START, fetchTehsilsAsync);
 }
-export function* fetchUcs(){
+export function* fetchUcs() {
   yield takeLatest(regionTypes.FETCH_UCS_START, fetchUcsAsync);
 }
 export function* regionSagas() {

@@ -1,12 +1,10 @@
-import { organizationTypes } from './organization.types';
-import { Toast } from 'native-base';
-import { Messages } from '../../../constants/Messages';
+import { campaignTypes } from './campaign.types';
+const toaster = require('../../../web/components/toaster/index');
 
 const INITIAL_STATE = {
   sider: false,
-  organizations: [],
+  campaigns: {},
   requests: [],
-  campaigns: [],
   categories: [],
   items: [],
   packages: [],
@@ -21,8 +19,6 @@ const INITIAL_STATE = {
   membersLoading: false,
   officesLoading: false,
   accountsLoading: false,
-  tasksLoading: false,
-  statsLoading: false,
   attachmentsLoading: false,
   volunteerJoining: false,
   moderatorJoining: false,
@@ -30,26 +26,12 @@ const INITIAL_STATE = {
   regionsLoading: false,
   logo: null,
   form: {},
-  selectedFilters: {
-    Item: [],
-    Filter: [{ Id: "InMyRegion", Name: "InMyRegion" }],
-  },
-  volunteersForDD: [],
-  moderatorsForDD: [],
+  selectedFilters:{Item:[],Filter:[{Id: "InMyRegion", Name: "InMyRegion"}]}
 };
 
-const organization = (state = INITIAL_STATE, action) => {
+const campaign = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "MEMBERS_FOR_DD":
-      const type =
-        action.payload.type === "Volunteer"
-          ? "volunteersForDD"
-          : "moderatorsForDD";
-      return {
-        ...state,
-        [type]: action.payload.Items,
-      };
-    case "SET_ORGANIZATION_FILTERS":
+        case 'SET_CAMPAIGN_FILTERS':
       let current = state.selectedFilters[action.payload.from]
         ? state.selectedFilters[action.payload.from]
         : [];
@@ -57,13 +39,13 @@ const organization = (state = INITIAL_STATE, action) => {
         current = [];
       }
       if (!action.payload.checked) {
-        if (!current.find((i) => action.payload.item.Id === i.Id))
+        if (!current.find(i => action.payload.item.Id === i.Id))
           current.push(action.payload.item);
       } else {
         current.splice(current.indexOf(action.payload.item), 1);
       }
-      if (action.payload.clearAllExceptCat) {
-        state.selectedFilters = { Item: [...state.selectedFilters.Item] };
+      if(action.payload.clearAllExceptCat){
+        state.selectedFilters={Item:[...state.selectedFilters.Item]};
       }
       return {
         ...state,
@@ -71,65 +53,61 @@ const organization = (state = INITIAL_STATE, action) => {
           ...state.selectedFilters,
           [action.payload.from]: [...current],
         },
-      };
-    case "FETCH_ORG_CAMPAIGNS_START":
+      }
+    case 'FETCH_CAMPAIGN_CAMPAIGNS_START':
       return {
         ...state,
-        campaignsLoading: true,
-      };
-    case "UPLOAD_SUCCESS":
+        campaignsLoading: true
+      }
+    case 'UPLOAD_SUCCESS':
       return {
         ...state,
-        logo: action.uploadType === "Logo" ? action.meta : null,
-      };
-    case "ADD_ORG_ATTACHMENT_START":
-    case "ADD_ORG_OFFICE_START":
-    case "ADD_ORG_ACCOUNT_START":
-    case "ADD_ORG_CAMPAIGN_START":
-    case "ADD_ORG_ITEMS_START":
-    case "ADD_ORG_PACKAGE_START":
-    case "ADD_ORGANIZATION_START":
+        logo: action.uploadType === 'Logo' ? action.meta : null
+      }
+    case 'ADD_CAMPAIGN_ATTACHMENT_START':
+    case 'ADD_CAMPAIGN_OFFICE_START':
+    case 'ADD_CAMPAIGN_ACCOUNT_START':
+    case 'ADD_CAMPAIGN_CAMPAIGN_START':
+    case 'ADD_CAMPAIGN_ITEMS_START':
+    case 'ADD_CAMPAIGN_PACKAGE_START':
+    case 'ADD_CAMPAIGN_START':
       return {
         ...state,
-        form: { ...action.payload, modal: true },
-      };
-    case "ADD_ORG_ATTACHMENT_SUCCESS":
-    case "ADD_ORG_OFFICE_SUCCESS":
-    case "ADD_ORG_ACCOUNT_SUCCESS":
-    case "ADD_ORG_CAMPAIGN_SUCCESS":
-    case "ADD_ORG_PACKAGE_SUCCESS":
-    case "ADD_ORGANIZATION_SUCCESS":
-    case "ADD_ORG_REGION_SUCCESS":
-    case "UPDATE_ORGANIZATION_SUCCESS":
+        form: { ...state.form,...action.payload, modal: true }
+      }
+    case 'ADD_CAMPAIGN_ATTACHMENT_SUCCESS':
+    case 'ADD_CAMPAIGN_OFFICE_SUCCESS':
+    case 'ADD_CAMPAIGN_ACCOUNT_SUCCESS':
+    case 'ADD_CAMPAIGN_CAMPAIGN_SUCCESS':
+    case 'ADD_CAMPAIGN_PACKAGE_SUCCESS':
+    case 'ADD_CAMPAIGN_SUCCESS':
+    case 'ADD_CAMPAIGN_REGION_SUCCESS':
+    case 'UPDATE_CAMPAIGN_SUCCESS':
       return {
         ...state,
         logo: null,
         form: { modal: false, ...action.payload },
-      };
-    case "ADD_ORG_REGION_FAILURE":
-    case "ADD_ORG_ATTACHMENT_FAILURE":
-    case "ADD_ORG_OFFICE_FAILURE":
-    case "ADD_ORG_ACCOUNT_FAILURE":
-    case "ADD_ORG_CAMPAIGN_FAILURE":
-    case "ADD_ORG_ITEMS_FAILURE":
-    case "ADD_ORG_PACKAGE_FAILURE":
-    case "ADD_ORGANIZATION_FAILURE":
+      }
+    case 'ADD_CAMPAIGN_ATTACHMENT_FAILURE':
+    case 'ADD_CAMPAIGN_OFFICE_FAILURE':
+    case 'ADD_CAMPAIGN_ACCOUNT_FAILURE':
+    case 'ADD_CAMPAIGN_CAMPAIGN_FAILURE':
+    case 'ADD_CAMPAIGN_ITEMS_FAILURE':
+    case 'ADD_CAMPAIGN_PACKAGE_FAILURE':
+    case 'ADD_CAMPAIGN_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
-        Toast.show({
-        text: action.payload.result.ExceptionMessage,
-        duration: 3000
-      })
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 500000 })
       return {
         ...state,
-        form: { ...state.form, error: action.payload, modal: true },
-      };
+        form: { ...state.form, error: action.payload, modal: true }
+      }
 
-    case "FETCH_ORG_OFFICES_START":
+    case 'FETCH_CAMPAIGN_OFFICES_START':
       return {
         ...state,
-        officesLoading: true,
-      };
-    case "FETCH_ORG_OFFICES_SUCCESS":
+        officesLoading: true
+      }
+    case 'FETCH_CAMPAIGN_OFFICES_SUCCESS':
       return {
         ...state,
         totalItemsCount: parseInt(action.payload.totalItemsCount),
@@ -137,14 +115,14 @@ const organization = (state = INITIAL_STATE, action) => {
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
         officesLoading: false,
-        offices: action.payload.result,
-      };
-    case "FETCH_ORG_ACCOUNTS_START":
+        offices: action.payload.result
+      }
+    case 'FETCH_CAMPAIGN_ACCOUNTS_START':
       return {
         ...state,
-        accountsLoading: true,
-      };
-    case "FETCH_ORG_ACCOUNTS_SUCCESS":
+        accountsLoading: true
+      }
+    case 'FETCH_CAMPAIGN_ACCOUNTS_SUCCESS':
       return {
         ...state,
         accountsLoading: false,
@@ -153,13 +131,13 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-      };
-    case "FETCH_ORG_ATTACHMENTS_START":
+      }
+    case 'FETCH_CAMPAIGN_ATTACHMENTS_START':
       return {
         ...state,
-        attachmentsLoading: true,
-      };
-    case "FETCH_ORG_ATTACHMENTS_SUCCESS":
+        attachmentsLoading: true
+      }
+    case 'FETCH_CAMPAIGN_ATTACHMENTS_SUCCESS':
       return {
         ...state,
         attachmentsLoading: false,
@@ -169,8 +147,8 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-      };
-    case "FETCH_ORG_CAMPAIGNS_SUCCESS":
+      }
+    case 'FETCH_CAMPAIGN_CAMPAIGNS_SUCCESS':
       return {
         ...state,
         campaigns: action.payload.result,
@@ -178,14 +156,14 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-        campaignsLoading: false,
-      };
-    case "FETCH_ORG_REGIONS_START":
+        campaignsLoading: false
+      }
+    case 'FETCH_CAMPAIGN_REGIONS_START':
       return {
         ...state,
-        regionsLoading: true,
-      };
-    case "FETCH_ORG_REGIONS_SUCCESS":
+        regionsLoading: true
+      }
+    case 'FETCH_CAMPAIGN_REGIONS_SUCCESS':
       return {
         ...state,
         regions: action.payload.result,
@@ -194,52 +172,42 @@ const organization = (state = INITIAL_STATE, action) => {
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
         regionsLoading: false,
-      };
-    case "REQUEST_START":
+      }
+    case 'CAMPAIGN_REQUEST_START':
       return {
         ...state,
         volunteerJoining: action.payload.Type === "Volunteer",
         moderatorJoining: action.payload.Type === "Moderator",
-        memberJoining: action.payload.Type === "Member",
-      };
-    case "REQUEST_SUCCESS":
-      Toast.show({
-        text: "Your request has been sent.",
-        duration: 3000
-      });
-      return {
-        ...state,
-        form: { modal: false, orgModal: false },
-      };
-    case "REQUEST_FAILURE":
+        memberJoining: action.payload.Type === 'Member'
+      }
+    case 'CAMPAIGN_REQUEST_SUCCESS':
+    case 'CAMPAIGN_REQUEST_FAILURE':
       if (action.payload.result && action.payload.result.ExceptionMessage)
-        Toast.show({
-        text: "Your request has been sent.",
-        duration: 3000
-      });
+        toaster.error("Notification Message", action.payload.result.ExceptionMessage, { timeOut: 50000 })
       //alert(action.payload.result.ExceptionMessage);
       return {
         ...state,
         volunteerJoining: false,
         moderatorJoining: false,
         memberJoining: false,
-      };
-    case "FETCH_ORG_REQUESTS_START":
+        form: { modal: false }
+      }
+    case 'FETCH_CAMPAIGN_REQUESTS_START':
       return {
         ...state,
-        requestsLoading: true,
-      };
-    case "FETCH_ORG_MEMBERS_START":
+        requestsLoading: true
+      }
+    case 'FETCH_CAMPAIGN_MEMBERS_START':
       return {
         ...state,
-        membersLoading: true,
-      };
-    case "FETCH_ORG_ITEMS_START":
+        membersLoading: true
+      }
+    case 'FETCH_CAMPAIGN_ITEMS_START':
       return {
         ...state,
-        itemsLoading: true,
-      };
-    case "FETCH_ORG_REQUESTS_SUCCESS":
+        itemsLoading: true
+      }
+    case 'FETCH_CAMPAIGN_REQUESTS_SUCCESS':
       return {
         ...state,
         requestsLoading: false,
@@ -248,10 +216,10 @@ const organization = (state = INITIAL_STATE, action) => {
           totalItemsCount: parseInt(action.payload.totalItemsCount),
           activePage: action.payload.activePage,
           itemsCountPerPage: action.payload.itemsCountPerPage,
-          pageRangeDisplayed: action.payload.pageRangeDisplayed,
-        },
-      };
-    case "FETCH_ORG_MEMBERS_SUCCESS":
+          pageRangeDisplayed: action.payload.pageRangeDisplayed
+        }
+      }
+    case 'FETCH_CAMPAIGN_MEMBERS_SUCCESS':
       return {
         ...state,
         membersLoading: false,
@@ -260,8 +228,8 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-      };
-    case "FETCH_ORG_ITEMS_SUCCESS":
+      }
+    case 'FETCH_CAMPAIGN_ITEMS_SUCCESS':
       return {
         ...state,
         items: action.payload.result,
@@ -269,14 +237,14 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-        itemsLoading: false,
-      };
-    case "FETCH_ORG_PACKAGES_START":
+        itemsLoading: false
+      }
+    case 'FETCH_CAMPAIGN_PACKAGES_START':
       return {
         ...state,
-        packagesLoading: true,
-      };
-    case "FETCH_ORG_PACKAGES_SUCCESS":
+        packagesLoading: true
+      }
+    case 'FETCH_CAMPAIGN_PACKAGES_SUCCESS':
       return {
         ...state,
         packages: action.payload.result,
@@ -284,39 +252,44 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-        packagesLoading: false,
-      };
-    case "FETCH_ORG_PACKAGES_FAILURE":
+        packagesLoading: false
+      }
+    case 'FETCH_CAMPAIGN_PACKAGES_FAILURE':
       return {
         ...state,
-        packagesLoading: false,
-      };
-    case "OPEN_MODAL":
+        packagesLoading: false
+      }
+    case 'OPEN_MODAL':
       return {
         ...state,
         form: {
           ...state.form,
-          modal: action.payload !== "ORG" ? true : false,
-          orgModal: action.payload === "ORG" ? true : false,
-          volunteerModal: action.payload === "VOLUNTEER" ? true : false,
-        },
-      };
-    case "CLOSE_MODAL":
+          campaignModal: action.payload==='CAMPAIGN'?true:false,
+          orgModal:action.payload==='ORG'?true:false,
+          regionModal:action.payload==='CAMPAIGN_REGION'?true:false,
+          campaignItemModal:action.payload==='CAMPAIGN_ITEMS_MODAL'?true:false,
+          attachmentModal:action.payload==='ATTACHMENT'?true:false
+        }
+      }
+    case 'CLOSE_MODAL':
       return {
         ...state,
         form: {
           ...state.form,
           modal: false,
-          orgModal: false,
-          volunteerModal: false,
-        },
-      };
-    case "FETCH_ORG_CATEGORIES_SUCCESS":
+          orgModal:false,
+          regionModal:false,
+          campaignItemModal:false,
+          campaignModal:false,
+          attachmentModal:false
+        }
+      }
+    case 'FETCH_CAMPAIGN_CATEGORIES_SUCCESS':
       return {
         ...state,
-        categories: action.payload,
-      };
-    case "FETCH_ORGANIZATION_SUCCESS":
+        categories: action.payload
+      }
+    case 'FETCH_CAMPAIGN_SUCCESS':
       return {
         ...state,
         form: {},
@@ -324,58 +297,48 @@ const organization = (state = INITIAL_STATE, action) => {
         activePage: action.payload.activePage,
         itemsCountPerPage: action.payload.itemsCountPerPage,
         pageRangeDisplayed: action.payload.pageRangeDisplayed,
-        organizations: action.payload.result.reduce((obj, item) => {
-          obj[item.Id] = item;
-          return obj;
-        }, {}),
-      };
-    case "ORGANIZATION_SELECTED":
+        campaigns: action.payload.result.reduce((obj, item) => {
+          obj[item.Id] = item
+          return obj
+        }, {})
+      }
+    case 'CAMPAIGN_SELECTED':
       return {
         ...state,
-        current: action.payload,
-      };
-    case "FETCH_ORG_DETAIL_SUCCESS":
+        current: action.payload
+      }
+    case 'FETCH_CAMPAIGN_DETAIL_SUCCESS':
       return {
         ...state,
         current: action.payload.result,
-        organizations: {
-          ...state.organizations,
-          [action.payload.result.Id]: action.payload.result,
-        },
-      };
-    case "ADD_ORG_ITEMS_SUCCESS":
+        campaigns: {
+          ...state.campaigns,
+          [action.payload.result.Id]: action.payload.result
+        }
+      }
+    case 'ADD_CAMPAIGN_ITEMS_SUCCESS':
       return {
         ...state,
-        items: [
-          ...state.items,
-          { ...action.payload.request, Id: action.payload.organization },
-        ],
-      };
-    case "REMOVE_ORG_ITEMS_START":
+        items: [...state.items, { ...action.payload.request, Id: action.payload.campaign }],
+        form:{}
+      }
+    case 'REMOVE_CAMPAIGN_ITEMS_START':
       return {
         ...state,
-      };
-    case "REMOVE_ORG_ITEMS_SUCCESS":
+      }
+    case 'REMOVE_CAMPAIGN_ITEMS_SUCCESS':
       return {
         ...state,
-        items: state.items.filter(
-          (i) => i.Item.Id !== action.payload.request.itemId
-        ),
-      };
-    case "REMOVE_ORG_ITEMS_FAILURE":
-      if (
-        action.payload.organization &&
-        action.payload.organization.result.ExceptionMessage
-      )
-        Toast.show({
-        text: action.payload.organization.result.ExceptionMessage,
-        duration: 3000
-      });
+        items: state.items.filter(i => i.Item.Id !== action.payload.request.itemId)
+      }
+    case 'REMOVE_CAMPAIGN_ITEMS_FAILURE':
+      if (action.payload.campaign && action.payload.campaign.result.ExceptionMessage)
+        toaster.error("Notification Message", action.payload.campaign.result.ExceptionMessage, { timeOut: 50000 })
       return {
-        ...state,
-      };
+        ...state
+      }
     default:
       return state;
   }
-};
-export default organization;
+}
+export default campaign;

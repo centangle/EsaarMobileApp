@@ -23,13 +23,26 @@ export const fetchDonationItemsSuccess = collections=>({
   type: donationTypes.FETCH_DONATION_ITEMS_SUCCESS,
   payload: collections
 });
+export const fetchThreadDetailSuccess = collection =>({
+  type: donationTypes.FETCH_THREAD_DETAIL_SUCCESS,
+  payload: collection
+});
 export const fetchDonationItemsStart = id=>({
   type: donationTypes.FETCH_DONATION_ITEMS_START,
   payload: id
 });
-export const fetchDonationRequestStart = () => ({
-  type: donationTypes.FETCH_DONATION_REQUEST_START
+export const fetchDonationRequestStart = (params) => ({
+  type: donationTypes.FETCH_DONATION_REQUEST_START,
+  params
 });
+export const assignRequestSuccess = collection => ({
+  type: donationTypes.ADD_DONATION_REQUEST_SUCCESS,
+  payload:collection
+});
+export const assignRequestFailure = error => ({
+  type: donationTypes.ADD_DONATION_REQUEST_FAILURE,
+  payload:error
+})
 export const fetchDonationDetailsStart = (Id)=>({
   type: donationTypes.FETCH_DONATION_DETAILS_START,
   payload:Id

@@ -25,7 +25,14 @@ export const fetchItemStart = () => ({
 export const fetchPeriferalItemStart = () =>({
   type:itemTypes.FETCH_PERIFERAL_ITEMS_START
 });
+export const fetchRootItemStart = () =>({
+  type:itemTypes.FETCH_ROOT_ITEMS_START
+});
 export const fetchPeriferalItemSuccess = collections=>({
   type:itemTypes.FETCH_PERIFERAL_ITEMS_SUCCESS,
   payload:collections
-})
+});
+export const fetchRootItemSuccess =collections=>({
+  type:itemTypes.FETCH_ROOT_ITEMS_SUCCESS,
+  payload:collections
+});

@@ -18,11 +18,22 @@ export const emailSignInStart = emailAndPassword => ({
   type: userTypes.EMAIL_SIGN_IN_START,
   payload: emailAndPassword
 });
-
-export const checkUserSession = () => ({
-  type: userTypes.CHECK_USER_SESSION
+export const userPosition = (payload) =>({
+  type: userTypes.SET_USER_POSITIION,
+  payload
+})
+export const checkSession = (payload) => ({
+  type: userTypes.CHECK_USER_SESSION,
+  payload
 });
-
+export const refreshLogin = (user) =>({
+  type:userTypes.REFRESH_LOGIN,
+  payload:user
+});
+export const loginError = error =>({
+  type:userTypes.LOGIN_FAILURE,
+  payload:error
+})
 export const signOutStart = () => ({
   type: userTypes.SIGN_OUT
 });
@@ -80,3 +91,11 @@ export const userDisconnected = (user)=>({
   type:userTypes.USER_DISCONNECTED,
   payload:user
 });
+export const youDisconnected = (user)=>({
+  type:userTypes.YOU_DISCONNECTED,
+  payload:user
+});
+export const youConnected = (user)=>({
+  type:userTypes.YOU_CONNECTED,
+  payload:user
+})

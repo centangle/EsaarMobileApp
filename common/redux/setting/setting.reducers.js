@@ -6,10 +6,14 @@ const INITIAL_STATE = {
   isLoading: false,
   miniLoading: false,
   uomLoading: false,
+  filter: false,
+  filterLoading: false,
+  selectedFilters:{}
 };
 
 const setting = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case 'FETCH_CAMPAIGN_START':
     case 'FETCH_ORGANIZATION_START':
     case 'ADD_ORGANIZATION_START':
     case 'FETCH_ORGANIZATION_DETAIL':
@@ -21,11 +25,23 @@ const setting = (state = INITIAL_STATE, action) => {
         ...state,
         isLoading: true
       }
+    case 'TOGGLE_FILTER':
+      return {
+        ...state,
+        filter: !state.filter,
+        filterLoading: true,
+      }
+    case 'TOGGLE_FILTER_SUCCESS':
+      return {
+        ...state,
+        filterLoading: false
+      }
     case 'ORG_REQUESTS_START':
       return {
         ...state,
         miniLoading: true,
       }
+    case 'FETCH_CAMPAIGN_SUCCESS':
     case 'FETCH_ORGANIZATION_SUCCESS':
     case 'ADD_ORGANIZATION_SUCCESS':
     case 'FETCH_ORGANIZATION_DETAIL_SUCCESS':
@@ -51,14 +67,14 @@ const setting = (state = INITIAL_STATE, action) => {
       return {
         ...state
       }
-    case settingTypes.FETCH_UOM_SUCCESS:
-      return {
-        ...state,
-        uoms: action.payload.result.reduce((obj, item) => {
-          obj[item.Id] = item
-          return obj
-        }, {})
-      }
+    // case settingTypes.FETCH_UOM_SUCCESS:
+    //   return {
+    //     ...state,
+    //     uoms: action.payload.result.reduce((obj, item) => {
+    //       obj[item.Id] = item
+    //       return obj
+    //     }, {})
+    //   }
     default:
       return state;
   }

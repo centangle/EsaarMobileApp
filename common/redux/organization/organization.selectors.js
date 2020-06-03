@@ -1,6 +1,14 @@
 import { createSelector } from 'reselect';
 
 const organization = state => state.organization;
+export const statsLoading = createSelector(
+  [organization],
+  organization => organization.statsLoading
+);
+export const tasksLoading = createSelector(
+  [organization],
+  organization => organization.tasksLoading
+);
 export const itemsLoading = createSelector(
   [organization],
   organization => organization.itemsLoading

@@ -12,4 +12,4 @@ export const formEncode = (obj) => {
   return data;
 };
 export const remapChildren = () => {};
-export const baseUrl = "https://api.esaar.app";
+export const baseUrl = "https://api-dev.esaar.app";

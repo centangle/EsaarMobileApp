@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import {recievedChanges,userConnected,userDisconnected} from '../user/user.actions';
+import {recievedChanges,userConnected,userDisconnected,youConnected,youDisconnected} from '../user/user.actions';
 import {socketLink} from '../api.links';
 
 /**
@@ -47,11 +47,11 @@ export const connectionOptions = {
   "path": '/beats'
 }
 
-// const click = new Audio('sounds/click.mp3')
-// click.volume = 0.25
+const click = new Audio('sounds/click.mp3')
+click.volume = 0.25
 
-// const alarm = new Audio('sounds/alarm.mp3')
-// alarm.volume = 0.5
+const alarm = new Audio('sounds/alarm.mp3')
+alarm.volume = 0.5
 
 /**
  * Update namespaces from the server.
@@ -114,7 +114,7 @@ export const selectNamespace = (ns, dispatch, data) => {
       // Dispatch action.
       dispatch(action)
     })
-  })
+  });
   const namespace = {
     ...ns,
     rooms: [],
@@ -222,13 +222,16 @@ export const subscribe = (socket) => {
     socket.on('notification', ({ message }) => {
       //emit(newMessage({ message }));
     });
+    socket.on('connect',e=>{
+      emit(youConnected(e))
+    });
     socket.on('user-disconnected',e=>{
       console.log(e);
       emit(userDisconnected(e));
     })
     socket.on('disconnect', e => {
       // TODO: handle
-      
+      emit(youDisconnected(e))
     });
     return () => {};
   });
