@@ -27,7 +27,7 @@
     "expo-image-picker": "~8.1.0",
     "expo-web-browser": "~8.1.0",
     "file-saver": "^2.0.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "native-base": "2.13.8",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
